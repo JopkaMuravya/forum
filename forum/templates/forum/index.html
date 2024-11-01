@@ -1,0 +1,185 @@
+<!doctype html>
+{% load static %}
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+    <!-- STYLESHEET -->
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="{% static 'fonts/icons/main/mainfont/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/icons/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header js-header js-dropdown">
+            <div class="container">
+                <div class="header__logo">
+                    <h1>
+                        <img src="{% static 'images/logo_forum.png' %}" alt="logo">
+                    </h1>
+                    <div class="header__title">Skuforum</div>
+                </div>                
+                <div class="header__search">
+                    <form action="#">
+                        <label>
+                            <i class="icon-Search js-header-search-btn-open"></i>
+                            <input type="search" placeholder="Искать" class="form-control">
+                        </label>
+                    </form>
+                </div>                
+                <div class="header__notification">
+                    <div class="header__notification-btn" data-dropdown-btn="notification">
+                        <i class="icon-Notification"></i>
+                        <span>1</span>
+                    </div>
+                    <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
+                        <div>
+                            <a href="#">
+                                <i class="icon-Info"></i>
+                                <p>Здесь будут уведомления<span>Новых уведомлений пока нет</span></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>                
+                <div class="header__user">
+                    <div class="header__user-btn" data-dropdown-btn="user">
+                        <img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar">
+                        Анонимус<i class="icon-Arrow_Below"></i>
+                    </div>
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
+                        <div>
+                            <div class="dropdown__icons">
+                                <a href="#"><i class="icon-Bookmark"></i></a>
+                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="#"><i class="icon-Preferences"></i></a>
+                                <a href="{% url 'signup' %}"><i class="icon-Logout"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <div class="header__offset-btn">
+                <a href="{% url 'create-topic' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+        <div class="container">
+            <div class="nav">
+                <div class="nav__categories js-dropdown">
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="categories">Все категории</div>
+                        <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
+                            <ul class="dropdown__catalog row">
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-f9bc64"></i>Хобби</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-348aa7"></i>Общество</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-4436f8"></i>Видео</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-5dd39e"></i>Случайное</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-ff755a"></i>Исскуство</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-bce784"></i>Технологии</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-83253f"></i>Игры</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-c49bbb"></i>Наука</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-3ebafa"></i>Здоровье</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-c6b38e"></i>Животные</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-a7cdbd"></i>Развлечения</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-525252"></i>Образование</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-777da7"></i>Q&amp;As</a></li>
+                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-368f8b"></i>Политика</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="tags">Теги</div>
+                        <div class="dropdown dropdown--design-01" data-dropdown-list="tags">
+                            <div class="tags">
+                                <a href="#" class="bg-4f80b0">лайфхаки</a>
+                                <a href="#" class="bg-424ee8">новости</a>
+                                <a href="#" class="bg-36b7d7">обзоры</a>
+                                <a href="#" class="bg-ef429e">истории</a>
+                                <a href="#" class="bg-7cc576">отзывы</a>
+                                <a href="#" class="bg-3a3a17">спорт</a>
+                                <a href="#" class="bg-6f7e9c">тренды</a>
+                                <a href="#" class="bg-f26522">музыка</a>
+                                <a href="#" class="bg-a3d39c">творчество</a>
+                                <a href="#" class="bg-92278f">идеи</a>
+                                <a href="#" class="bg-8781bd">мемы</a>
+                                <a href="#" class="bg-f1ab32">карьера</a>
+                                <a href="#" class="bg-3b96ca">мотивация</a>
+                                <a href="#" class="bg-348aa7">психология</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div class="posts">
+                <div class="posts__head">
+                    <div class="posts__topic">Тема</div>
+                    <div class="posts__category">Категория</div>
+                    <div class="posts__users">Автор</div>
+                    <div class="posts__replies">Ответы</div>
+                </div>
+                <div class="posts__body">
+                    <div class="posts__item">
+                        <div class="posts__section-left">
+                            <div class="posts__topic">
+                                <div class="posts__content">
+                                    <a href="#">
+                                        <h3>Заголовок темы</h3>
+                                    </a>
+                                    <p>Краткое описание темы или обсуждения.</p>
+                                    <div class="posts__tags tags">
+                                        <a href="#" class="bg-4f80b0">гейминг</a>
+                                        <a href="#" class="bg-424ee8">природа</a>
+                                        <a href="#" class="bg-36b7d7">развлечения</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="posts__category"><a href="#" class="category"><i class="bg-4436f8"></i>Категория</a></div>
+                        </div>
+                        <div class="posts__section-right">
+                            <div class="posts__users">
+                                <div>
+                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
+                                </div>
+                            </div>
+                            <div class="posts__replies">0</div>
+                        </div>                        
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </main>
+
+    <!-- JAVA SCRIPT -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+</body>
+</html>
