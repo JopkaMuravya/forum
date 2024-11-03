@@ -170,7 +170,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-4436f8"></i>{{ topic.category }}</a></div>
+                            <div class="posts__category">
+                                <a href="#" class="category">
+                                    <i class="{{ topic.category_color }}"></i>
+                                    {{ topic.category_name }}
+                                </a>
+                            </div>
                         </div>
                         <div class="posts__section-right">
                             <div class="posts__users">
