@@ -1,11 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import TopicForm
 
 
 def main_str(request):
     return render(request, 'forum/index.html', {})
 
 def create_topic(request):
-    return render(request, 'forum/create-topic.html', {})
+    if request.method == 'POST':
+        form = TopicForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('main_str')
+    else:
+        form = TopicForm()
+    return render(request, 'forum/create-topic.html', {'form': form})
 
 def signup(request):
     return render(request, 'forum/simple-signup.html', {})

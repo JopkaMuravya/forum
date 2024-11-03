@@ -92,53 +92,33 @@
                 <div class="create__head">
                     <div class="create__title"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New topic">Создать новую тему</div>
                 </div>
-                <div class="create__section">
-                    <label class="create__label" for="title">Заголовок темы</label>
-                    <input type="text" class="form-control" id="title" placeholder="">
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="create__section">
-                            <label class="create__label" for="category">Выберите категорию</label>
-                            <label class="custom-select">
-                                <select id="category">
-                                    <option>Хобби</option>
-                                    <option>Видео</option>
-                                    <option>Исскуство</option>
-                                    <option>Игры</option>
-                                    <option>Здоровье</option>
-                                    <option>Развлечения</option>
-                                    <option>Q&amp;As</option>
-                                    <option>Общество</option>
-                                    <option>Случайное</option>
-                                    <option>Технологии</option>
-                                    <option>Наука</option>
-                                    <option>Животные</option>
-                                    <option>Образование</option>
-                                    <option>Политика</option>
-                                </select>
-                            </label>
+                <form method="post" enctype="multipart/form-data" class="create__form">
+                    {% csrf_token %}
+                    <div class="create__section">
+                        <label class="create__label">Заголовок темы</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="create__section">
+                        <label class="create__label">Выберите категорию</label>
+                        {{ form.category }}
+                    </div>
+                    <div class="create__section create__textarea">
+                        <label class="create__label">Описание</label>
+                        <div class="create__textarea-head">
+                            <span><i class="icon-Upload_Files"></i></span> <!-- Иконка загрузки файлов -->
+                            <span><i class="icon-Emoticon"></i></span> <!-- Иконка для смайликов -->
                         </div>
+                        {{ form.description }}
                     </div>
-                </div>
-                <div class="create__section create__textarea">
-                    <label class="create__label" for="description">Описание</label>
-                    <div class="create__textarea-head">
-                        <span><i class="icon-Bold"></i></span>
-                        <span><i class="icon-Italic"></i></span>
-                        <span><i class="icon-Upload_Files"></i></span>
-                        <span><i class="icon-Emoticon"></i></span>
+                    <div class="create__section">
+                        <label class="create__label">Добавить теги</label>
+                        {{ form.tags }}
                     </div>
-                    <textarea class="form-control" id="description"></textarea>
-                </div>
-                <div class="create__section">
-                    <label class="create__label" for="tags">Добавить теги</label>
-                    <input type="text" class="form-control" id="tags" placeholder="">
-                </div>
-                <div class="create__footer">
-                    <a href="{% url 'main_str' %}" class="create__btn-cansel btn">Назад</a>
-                    <a href="#" class="create__btn-create btn btn--type-02">Опубликовать</a>
-                </div>
+                    <div class="create__footer">
+                        <a href="{% url 'main_str' %}" class="create__btn-cansel btn">Назад</a>
+                        <button type="submit" class="create__btn-create btn btn--type-02">Опубликовать</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
