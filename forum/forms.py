@@ -25,6 +25,12 @@ class TopicForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'custom-select'})
     )
 
+    tags = forms.CharField(
+        required=False,
+        label="Теги",
+        widget=forms.TextInput(attrs={'placeholder': 'Введите теги через запятую'})
+    )
+
     class Meta:
         model = Topic
         fields = ['title', 'category', 'description', 'tags', 'image']
@@ -40,5 +46,5 @@ class TopicForm(forms.ModelForm):
         super(TopicForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите заголовок'})
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите описание'})
-        self.fields['tags'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Добавьте теги'})
+        self.fields['tags'].widget.attrs.update({'class': 'form-control'})
         self.fields['image'].widget.attrs.update({'class': 'form-control'})
