@@ -102,24 +102,20 @@
         <div class="container">
             <div class="nav">
                 <div class="nav__categories js-dropdown">
-                    <div class="nav__select">
+                   <div class="nav__select">
                         <div class="btn-select" data-dropdown-btn="categories">Все категории</div>
                         <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
                             <ul class="dropdown__catalog row">
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-f9bc64"></i>Хобби</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-348aa7"></i>Общество</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-4436f8"></i>Видео</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-5dd39e"></i>Случайное</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-ff755a"></i>Исскуство</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-bce784"></i>Технологии</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-83253f"></i>Игры</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-c49bbb"></i>Наука</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-3ebafa"></i>Здоровье</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-c6b38e"></i>Животные</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-a7cdbd"></i>Развлечения</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-525252"></i>Образование</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-777da7"></i>Q&amp;As</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-368f8b"></i>Политика</a></li>
+                                <li class="col-xs-12"><a href="{% url 'main_str' %}">Все категории</a></li>
+                                {% for key, value in categories.items %}
+                                    {% with color_class=value.0 category_name=value.1 %}
+                                        <li class="col-xs-6">
+                                            <a href="{% url 'category_filter' key %}" class="category">
+                                                <i class="{{ color_class }}"></i>{{ category_name }}
+                                            </a>
+                                        </li>
+                                    {% endwith %}
+                                {% endfor %}
                             </ul>
                         </nav>
                     </div>

@@ -2,10 +2,6 @@ from django.shortcuts import render, redirect
 from .forms import TopicForm
 from .models import Topic, Tag
 
-from django.shortcuts import render, redirect
-from .forms import TopicForm
-from .models import Topic, Tag
-
 CATEGORY_COLORS = {
     'hobby': ('bg-f9bc64', 'Хобби'),
     'video': ('bg-4436f8', 'Видео'),
@@ -23,13 +19,20 @@ CATEGORY_COLORS = {
     'politics': ('bg-368f8b', 'Политика'),
 }
 
-def main_str(request):
-    topics = Topic.objects.all()
+
+def main_str(request, category=None):
+    if category:
+        topics = Topic.objects.filter(category=category)
+    else:
+        topics = Topic.objects.all()
+
     for topic in topics:
         color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
         topic.category_color = color
         topic.category_name = name
-    return render(request, 'forum/index.html', {'topics': topics})
+
+    categories = CATEGORY_COLORS
+    return render(request, 'forum/index.html', {'topics': topics, 'categories': categories})
 
 def create_topic(request):
     if request.method == 'POST':
