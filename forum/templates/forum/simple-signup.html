@@ -56,50 +56,67 @@
                     <h3>Создайте новую учётную запись</h3>
                     <p>Зарегистрировавшись, вы сможете создавать посты, оставлять комментарии, оценивать записи других пользователей, участвовать в обсуждениях и  многое другое!</p>
                 </div>
-                <div class="signup__form">
-                    <div class="row" data-visible="desktop">
-                        <div class="col-md-6">
-                            <div class="signup__section">
-                                <label class="signup__label" for="first-name">Имя</label>
-                                <input type="text" class="form-control" id="first-name" value="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="signup__section">
-                                <label class="signup__label" for="last-name">Фамилия</label>
-                                <input type="text" class="form-control" id="last-name" value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="signup__section">
-                        <label class="signup__label" for="username">Никнейм</label>
-                        <input type="text" class="form-control" id="username" value="">
-                    </div>
-                    <div class="signup__section">
-                        <label class="signup__label" for="email">Почта</label>
-                        <input type="text" class="form-control" id="email" value="">
-                    </div>
-                    <div class="signup__section">
-                        <label class="signup__label" for="password">Пароль</label>
-                        <div class="message-input">
-                            <input type="password" class="form-control" id="password" value="">
-                        </div>
-                    </div>
-                    <div class="signup__checkbox">
-                        <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="signup__form">
+                        <div class="row" data-visible="desktop">
                             <div class="col-md-6">
-                                <label class="signup__box">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox" checked="checked">
-                                        <i></i>
-                                    </label>
-                                    <span>Я принимаю правила сообщества.</span>
-                                </label>
+                                <div class="signup__section">
+                                    <label class="signup__label">Имя</label>
+                                    <div>
+                                        {{ user_form.first_name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="signup__section">
+                                    <label class="signup__label">Фамилия</label>
+                                    <div>
+                                        {{ user_form.last_name }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="signup__section">
+                            <label class="signup__label">Никнейм</label>
+                            <div>
+                                {{ user_form.username }}
+                            </div>
+                        </div>
+                        <div class="signup__section">
+                            <label class="signup__label">Почта</label>
+                            <div>
+                                {{ user_form.email }}
+                            </div>
+                        </div>
+                        <div class="signup__section">
+                            <label class="signup__label">Пароль</label>
+                            <div class="message-input">
+                                {{ user_form.password }}
+                            </div>
+                        </div>
+                        <div class="signup__section">
+                            <label class="signup__label">Повторите пароль</label>
+                            <div class="message-input">
+                                {{ user_form.password2 }}
+                            </div>
+                        </div>
+                        <div class="signup__checkbox">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="signup__box">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" checked="checked">
+                                            <i></i>
+                                        </label>
+                                        <span>Я принимаю правила сообщества.</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="signup__btn-create btn btn--type-02">Создать новый аккаунт</button>
                     </div>
-                    <a href="#" class="signup__btn-create btn btn--type-02">Создать новый аккаунт</a>
-                </div>
+                </form>
             </div>
         </div>
     </main>

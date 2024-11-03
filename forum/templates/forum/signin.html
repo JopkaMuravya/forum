@@ -56,23 +56,25 @@
                     <h3>Войдите в учётную запись</h3>
                     <p>Войдя в аккаунт, вы сможете создавать посты, оставлять комментарии, оценивать записи других пользователей, участвовать в обсуждениях и многое другое!</p>
                 </div>
-                <div class="signup__form">
-                    <div class="signup__section">
-                        <label class="signup__label" for="username">Никнейм</label>
-                        <input type="text" class="form-control" id="username" value="">
-                    </div>
-                    <div class="signup__section">
-                        <label class="signup__label" for="email">Почта</label>
-                        <input type="text" class="form-control" id="email" value="">
-                    </div>
-                    <div class="signup__section">
-                        <label class="signup__label" for="password">Пароль</label>
-                        <div class="message-input">
-                            <input type="password" class="form-control" id="password" value="">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="signup__form">
+                        <div class="signup__section">
+                            <label class="signup__label">{{ form.username.label }}</label>
+                            <div>
+                                {{ form.username }}
+                            </div>
+
                         </div>
+                        <div class="signup__section">
+                            <label class="signup__label">Пароль</label>
+                            <div class="message-input">
+                                {{ form.password }}
+                            </div>
+                        </div>
+                        <button type="submit" class="signup__btn-create btn btn--type-02">Войти</button>
                     </div>
-                    <a href="#" class="signup__btn-create btn btn--type-02">Войти</a>
-                </div>
+                </form>
             </div>
         </div>
     </main>
