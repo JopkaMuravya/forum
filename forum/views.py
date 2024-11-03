@@ -21,10 +21,17 @@ CATEGORY_COLORS = {
 
 
 def main_str(request, category=None):
+    selected_tags = request.GET.getlist('tags')
+    tags = Tag.objects.all()
+
+    topics = Topic.objects.all()
+
     if category:
-        topics = Topic.objects.filter(category=category)
-    else:
-        topics = Topic.objects.all()
+        topics = topics.filter(category=category)
+
+    if selected_tags:
+        for tag_id in selected_tags:
+            topics = topics.filter(tags__id=tag_id)
 
     for topic in topics:
         color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
@@ -32,7 +39,12 @@ def main_str(request, category=None):
         topic.category_name = name
 
     categories = CATEGORY_COLORS
-    return render(request, 'forum/index.html', {'topics': topics, 'categories': categories})
+    return render(request, 'forum/index.html', {
+        'topics': topics,
+        'categories': categories,
+        'tags': tags,
+        'selected_tags': list(map(int, selected_tags)),
+    })
 
 def create_topic(request):
     if request.method == 'POST':

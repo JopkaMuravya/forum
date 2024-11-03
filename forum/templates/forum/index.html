@@ -123,20 +123,16 @@
                         <div class="btn-select" data-dropdown-btn="tags">Теги</div>
                         <div class="dropdown dropdown--design-01" data-dropdown-list="tags">
                             <div class="tags">
-                                <a href="#" class="bg-4f80b0">лайфхаки</a>
-                                <a href="#" class="bg-424ee8">новости</a>
-                                <a href="#" class="bg-36b7d7">обзоры</a>
-                                <a href="#" class="bg-ef429e">истории</a>
-                                <a href="#" class="bg-7cc576">отзывы</a>
-                                <a href="#" class="bg-3a3a17">спорт</a>
-                                <a href="#" class="bg-6f7e9c">тренды</a>
-                                <a href="#" class="bg-f26522">музыка</a>
-                                <a href="#" class="bg-a3d39c">творчество</a>
-                                <a href="#" class="bg-92278f">идеи</a>
-                                <a href="#" class="bg-8781bd">мемы</a>
-                                <a href="#" class="bg-f1ab32">карьера</a>
-                                <a href="#" class="bg-3b96ca">мотивация</a>
-                                <a href="#" class="bg-348aa7">психология</a>
+                                <a href="{% url 'main_str' %}" class="tag {% if not selected_tags %}selected{% endif %}">
+                                    Все теги
+                                </a>
+                                {% for tag in tags %}
+                                    <a href="{% url 'main_str' %}?{% if selected_tags %}tags={{ selected_tags|join:'&tags=' }}&{% endif %}tags={{ tag.id }}"
+                                       class="tag {% if tag.id in selected_tags %}selected{% endif %}"
+                                       style="background-color: {% if tag.id in selected_tags %}#ccc{% else %}{{ tag.color }}{% endif %};">
+                                        {{ tag.name }}
+                                    </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
