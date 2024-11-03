@@ -7,7 +7,7 @@ def main_str(request):
 
 def create_topic(request):
     if request.method == 'POST':
-        form = TopicForm(request.POST)
+        form = TopicForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('main_str')

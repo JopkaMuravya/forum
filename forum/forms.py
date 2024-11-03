@@ -27,12 +27,13 @@ class TopicForm(forms.ModelForm):
 
     class Meta:
         model = Topic
-        fields = ['title', 'category', 'description', 'tags']
+        fields = ['title', 'category', 'description', 'tags', 'image']
         labels = {
             'title': 'Заголовок темы',
             'category': 'Категория',
             'description': 'Описание',
             'tags': 'Теги',
+            'image': 'Изображение',
         }
 
     def __init__(self, *args, **kwargs):
@@ -40,3 +41,4 @@ class TopicForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите заголовок'})
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите описание'})
         self.fields['tags'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Добавьте теги'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control'})

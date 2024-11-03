@@ -141,10 +141,14 @@
                     <div class="create__section create__textarea">
                         <label class="create__label">Описание</label>
                         <div class="create__textarea-head">
-                            <span><i class="icon-Upload_Files"></i></span>
+<!--                            <span><i class="icon-Upload_Files"></i></span>-->
                             <span><i class="icon-Emoticon" id="emoji-trigger"></i></span>
                         </div>
                         {{ form.description }}
+                    </div>
+                    <div class="create__section">
+                        <label class="create__label">Изображение</label>
+                        {{ form.image }}
                     </div>
                     <div class="create__section">
                         <label class="create__label">Добавить теги</label>
