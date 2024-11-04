@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.db import models
+from django.utils import timezone
 import random
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name="Тег")
@@ -12,6 +15,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Topic(models.Model):
     title = models.CharField(max_length=200, verbose_name="Заголовок темы")
@@ -33,3 +37,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Комментарий от {self.author} к теме {self.topic}"
+

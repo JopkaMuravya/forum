@@ -125,7 +125,6 @@
             display: none !important;
         }
     </style>
-
 </head>
 <body>
     <!-- HEADER -->
@@ -222,7 +221,6 @@
                                 {% if topic.image %}
                                     <img src="{{ topic.image.url }}" alt="Topic Image" class="topic-image" onclick="openModal(this.src)">
                                 {% endif %}
-
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
                                         <div>
@@ -233,7 +231,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Отображение комментариев -->
                         {% for comment in comments %}
                         <div class="topic topic--comment">
@@ -275,7 +272,6 @@
                                 <button type="submit" class="create__btn-create btn btn--type-02">Отправить</button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>

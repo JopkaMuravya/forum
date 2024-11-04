@@ -1,7 +1,47 @@
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .forms import LoginForm, UserRegistrationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .forms import TopicForm, CommentForm
 from .models import Topic, Tag, Comment
+
+
+def user_login(request):
+    logout(request)
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('main_str')
+                else:
+                    return HttpResponse('Disabled account')
+            else:
+                return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+    return render(request, 'forum/signin.html', {'form': form})
+
+
+def register(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data['password'])
+            new_user.save()
+            login(request, new_user)
+            return redirect('main_str')
+    else:
+        user_form = UserRegistrationForm()
+    return render(request, 'forum/simple-signup.html', {'user_form': user_form})
+
+
 
 CATEGORY_COLORS = {
     'hobby': ('bg-f9bc64', 'Хобби'),
@@ -19,6 +59,7 @@ CATEGORY_COLORS = {
     'education': ('bg-525252', 'Образование'),
     'politics': ('bg-368f8b', 'Политика'),
 }
+
 
 def main_str(request, category=None):
     search_query = request.GET.get('q', '')
@@ -53,6 +94,7 @@ def main_str(request, category=None):
         'search_query': search_query,
     })
 
+
 def create_topic(request):
     if request.method == 'POST':
         form = TopicForm(request.POST, request.FILES)
@@ -73,11 +115,6 @@ def create_topic(request):
         form = TopicForm()
     return render(request, 'forum/create-topic.html', {'form': form})
 
-def signup(request):
-    return render(request, 'forum/simple-signup.html', {})
-
-def signin(request):
-    return render(request, 'forum/signin.html', {})
 
 def single_topic(request, id):
     topic = get_object_or_404(Topic, id=id)
