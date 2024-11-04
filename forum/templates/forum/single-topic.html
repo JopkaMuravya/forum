@@ -89,6 +89,41 @@
             justify-content: flex-end;
             margin-bottom: 20px;
         }
+
+        .emoji-picker__nav,
+        .emoji-picker__tabs,
+        .emoji-picker__tab-list {
+            display: none !important;
+        }
+
+        .emoji-picker__preview,
+        .emoji-picker__preview-text,
+        .emoji-picker__preview-emoji {
+            display: none !important;
+        }
+
+        .emoji-picker__picker {
+            width: 400px !important;
+            height: 350px !important;
+        }
+
+        .emoji-picker__emoji {
+            font-size: 1.8em !important;
+        }
+
+        .emoji-picker__header,
+        .emoji-picker__nav {
+            display: none !important;
+        }
+
+        .emoji-picker__picker {
+            padding-top: 0 !important;
+            height: auto !important;
+        }
+
+        .emoji-picker__category-label {
+            display: none !important;
+        }
     </style>
 
 </head>
@@ -227,9 +262,9 @@
                         <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="create__section create__textarea">
-                                <label class="create__label" for="comment">Ваш комментарий</label>
+                                <label class="create__label">Ваш комментарий</label>
                                 <div class="create__textarea-head">
-                                    <span><i class="icon-Emoticon"></i></span>
+                                    <span><i class="icon-Emoticon" id="emoji-trigger"></i></span>
                                     <input type="file" name="image" accept="image/*">
                                 </div>
                                 {{ comment_form.text }}
@@ -252,20 +287,63 @@
         <img class="modal-content" id="modalImage">
     </div>
 
-    <!-- JAVA SCRIPT -->
+    <!-- JavaScript -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/emoji-button.min.js' %}"></script>
 
     <script>
-    function openModal(imageSrc) {
-        document.getElementById("imageModal").style.display = "block";
-        document.getElementById("modalImage").src = imageSrc;
-    }
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById("imageModal");
+            const modalImage = document.getElementById("modalImage");
+            const closeBtn = document.querySelector(".close");
 
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
-    }
+            function openModal(imageSrc) {
+                modal.style.display = "block";
+                modalImage.src = imageSrc;
+            }
+
+            function closeModal() {
+                modal.style.display = "none";
+                modalImage.src = "";
+            }
+
+            document.querySelectorAll('.topic-image, .comment-image').forEach(img => {
+                img.addEventListener('click', function() {
+                    openModal(this.src);
+                });
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+
+            const button = document.querySelector('#emoji-trigger');
+            const input = document.querySelector('textarea[name="text"]');
+            const picker = new EmojiButton({
+                position: 'top-end',
+                autoHide: false,
+                theme: 'light',
+                showSearch: false
+            });
+
+            let isPickerVisible = false;
+
+            picker.on('emoji', emoji => {
+                input.setRangeText(emoji, input.selectionStart, input.selectionEnd, 'end');
+                picker.hidePicker();
+                isPickerVisible = false;
+            });
+
+            button.addEventListener('click', () => {
+                if (isPickerVisible) {
+                    picker.hidePicker();
+                    isPickerVisible = false;
+                } else {
+                    picker.showPicker(button);
+                    isPickerVisible = true;
+                }
+            });
+        });
     </script>
 
 </body>
