@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from .forms import TopicForm
 from .models import Topic, Tag
 
@@ -19,8 +20,8 @@ CATEGORY_COLORS = {
     'politics': ('bg-368f8b', 'Политика'),
 }
 
-
 def main_str(request, category=None):
+    search_query = request.GET.get('q', '')
     selected_tags = request.GET.getlist('tags')
     tags = Tag.objects.all()
 
@@ -33,6 +34,11 @@ def main_str(request, category=None):
         for tag_id in selected_tags:
             topics = topics.filter(tags__id=tag_id)
 
+    if search_query:
+        topics = topics.filter(
+            Q(title__icontains=search_query) | Q(description__icontains=search_query)
+        )
+
     for topic in topics:
         color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
         topic.category_color = color
@@ -44,6 +50,7 @@ def main_str(request, category=None):
         'categories': categories,
         'tags': tags,
         'selected_tags': list(map(int, selected_tags)),
+        'search_query': search_query,
     })
 
 def create_topic(request):

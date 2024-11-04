@@ -51,13 +51,13 @@
                     <div class="header__title">Skuforum</div>
                 </div>                
                 <div class="header__search">
-                    <form action="#">
+                    <form action="{% url 'main_str' %}" method="get">
                         <label>
                             <i class="icon-Search js-header-search-btn-open"></i>
-                            <input type="search" placeholder="Искать" class="form-control">
+                            <input type="search" name="q" value="{{ search_query }}" placeholder="Искать" class="form-control">
                         </label>
                     </form>
-                </div>                
+                </div>
                 <div class="header__notification">
                     <div class="header__notification-btn" data-dropdown-btn="notification">
                         <i class="icon-Notification"></i>
