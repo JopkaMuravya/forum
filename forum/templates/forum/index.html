@@ -29,6 +29,15 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .posts__item {
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+
 </head>
 <body>
     <!-- HEADER -->
@@ -42,13 +51,13 @@
                     <div class="header__title">Skuforum</div>
                 </div>                
                 <div class="header__search">
-                    <form action="#">
+                    <form action="{% url 'main_str' %}" method="get">
                         <label>
                             <i class="icon-Search js-header-search-btn-open"></i>
-                            <input type="search" placeholder="Искать" class="form-control">
+                            <input type="search" name="q" value="{{ search_query }}" placeholder="Искать" class="form-control">
                         </label>
                     </form>
-                </div>                
+                </div>
                 <div class="header__notification">
                     <div class="header__notification-btn" data-dropdown-btn="notification">
                         <i class="icon-Notification"></i>
@@ -102,24 +111,20 @@
         <div class="container">
             <div class="nav">
                 <div class="nav__categories js-dropdown">
-                    <div class="nav__select">
+                   <div class="nav__select">
                         <div class="btn-select" data-dropdown-btn="categories">Все категории</div>
                         <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
                             <ul class="dropdown__catalog row">
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-f9bc64"></i>Хобби</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-348aa7"></i>Общество</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-4436f8"></i>Видео</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-5dd39e"></i>Случайное</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-ff755a"></i>Исскуство</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-bce784"></i>Технологии</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-83253f"></i>Игры</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-c49bbb"></i>Наука</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-3ebafa"></i>Здоровье</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-c6b38e"></i>Животные</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-a7cdbd"></i>Развлечения</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-525252"></i>Образование</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-777da7"></i>Q&amp;As</a></li>
-                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-368f8b"></i>Политика</a></li>
+                                <li class="col-xs-12"><a href="{% url 'main_str' %}">Все категории</a></li>
+                                {% for key, value in categories.items %}
+                                    {% with color_class=value.0 category_name=value.1 %}
+                                        <li class="col-xs-6">
+                                            <a href="{% url 'category_filter' key %}" class="category">
+                                                <i class="{{ color_class }}"></i>{{ category_name }}
+                                            </a>
+                                        </li>
+                                    {% endwith %}
+                                {% endfor %}
                             </ul>
                         </nav>
                     </div>
@@ -127,20 +132,16 @@
                         <div class="btn-select" data-dropdown-btn="tags">Теги</div>
                         <div class="dropdown dropdown--design-01" data-dropdown-list="tags">
                             <div class="tags">
-                                <a href="#" class="bg-4f80b0">лайфхаки</a>
-                                <a href="#" class="bg-424ee8">новости</a>
-                                <a href="#" class="bg-36b7d7">обзоры</a>
-                                <a href="#" class="bg-ef429e">истории</a>
-                                <a href="#" class="bg-7cc576">отзывы</a>
-                                <a href="#" class="bg-3a3a17">спорт</a>
-                                <a href="#" class="bg-6f7e9c">тренды</a>
-                                <a href="#" class="bg-f26522">музыка</a>
-                                <a href="#" class="bg-a3d39c">творчество</a>
-                                <a href="#" class="bg-92278f">идеи</a>
-                                <a href="#" class="bg-8781bd">мемы</a>
-                                <a href="#" class="bg-f1ab32">карьера</a>
-                                <a href="#" class="bg-3b96ca">мотивация</a>
-                                <a href="#" class="bg-348aa7">психология</a>
+                                <a href="{% url 'main_str' %}" class="tag {% if not selected_tags %}selected{% endif %}">
+                                    Все теги
+                                </a>
+                                {% for tag in tags %}
+                                    <a href="{% url 'main_str' %}?{% if selected_tags %}tags={{ selected_tags|join:'&tags=' }}&{% endif %}tags={{ tag.id }}"
+                                       class="tag {% if tag.id in selected_tags %}selected{% endif %}"
+                                       style="background-color: {% if tag.id in selected_tags %}#ccc{% else %}{{ tag.color }}{% endif %};">
+                                        {{ tag.name }}
+                                    </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -153,23 +154,29 @@
                     <div class="posts__users">Автор</div>
                     <div class="posts__replies">Ответы</div>
                 </div>
-                <div class="posts__body">
+               <div class="posts__body">
+                {% for topic in topics %}
                     <div class="posts__item">
                         <div class="posts__section-left">
                             <div class="posts__topic">
                                 <div class="posts__content">
-                                    <a href="#">
-                                        <h3>Заголовок темы</h3>
+                                    <a href="{% url 'single_topic' topic.id %}">
+                                        <h3>{{ topic.title }}</h3>
                                     </a>
-                                    <p>Краткое описание темы или обсуждения.</p>
+                                    <p>{{ topic.description|truncatewords:20 }}</p>
                                     <div class="posts__tags tags">
-                                        <a href="#" class="bg-4f80b0">гейминг</a>
-                                        <a href="#" class="bg-424ee8">природа</a>
-                                        <a href="#" class="bg-36b7d7">развлечения</a>
+                                        {% for tag in topic.tags.all %}
+                                            <a href="#" style="background-color: {{ tag.color }};">{{ tag.name }}</a>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-4436f8"></i>Категория</a></div>
+                            <div class="posts__category">
+                                <a href="#" class="category">
+                                    <i class="{{ topic.category_color }}"></i>
+                                    {{ topic.category_name }}
+                                </a>
+                            </div>
                         </div>
                         <div class="posts__section-right">
                             <div class="posts__users">
@@ -178,11 +185,15 @@
                                 </div>
                             </div>
                             <div class="posts__replies">0</div>
-                        </div>                        
+                        </div>
                     </div>
+                {% empty %}
+                <p>На данный момент нет тем для отображения.</p>
+                {% endfor %}
+
+                </div>
                 </div>                
             </div>
-        </div>
     </main>
 
     <!-- JAVA SCRIPT -->
