@@ -16,6 +16,7 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+
 class Topic(models.Model):
     title = models.CharField(max_length=200, verbose_name="Заголовок темы")
     category = models.CharField(max_length=100, verbose_name="Категория")
