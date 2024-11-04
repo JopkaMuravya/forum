@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .forms import TopicForm
 from .models import Topic, Tag
@@ -79,5 +79,9 @@ def signup(request):
 def signin(request):
     return render(request, 'forum/signin.html', {})
 
-def topic(request):
-    return render(request, 'forum/single-topic.html', {})
+def single_topic(request, id):
+    topic = get_object_or_404(Topic, id=id)
+    color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
+    topic.category_color = color
+    topic.category_name = name
+    return render(request, 'forum/single-topic.html', {'topic': topic})
