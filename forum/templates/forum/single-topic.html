@@ -76,7 +76,21 @@
             margin-top: 10px;
             margin-bottom: -25px;
         }
+
+        .comment-image {
+            max-width: 300px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .create__footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
     </style>
+
 </head>
 <body>
     <!-- HEADER -->
@@ -170,7 +184,6 @@
                                     <p>{{ topic.description }}</p>
                                 </div>
 
-                                <!-- Изображение топика с модальным увеличением -->
                                 {% if topic.image %}
                                     <img src="{{ topic.image.url }}" alt="Topic Image" class="topic-image" onclick="openModal(this.src)">
                                 {% endif %}
@@ -186,7 +199,8 @@
                             </div>
                         </div>
 
-                        <!-- Шаблонный комментарий -->
+                        <!-- Отображение комментариев -->
+                        {% for comment in comments %}
                         <div class="topic topic--comment">
                             <div class="topic__head">
                                 <div class="topic__avatar">
@@ -200,28 +214,33 @@
                             </div>
                             <div class="topic__content">
                                 <div class="topic__text">
-                                    <p>Текст комментария</p>
+                                    <p>{{ comment.text }}</p>
+                                    {% if comment.image %}
+                                        <img src="{{ comment.image.url }}" alt="Comment Image" class="comment-image" onclick="openModal(this.src)">
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
+                        {% endfor %}
 
                         <!-- Форма для комментариев -->
-                        <div class="create__section create__textarea">
-                            <label class="create__label" for="comment">Ваш комментарий</label>
-                            <div class="create__textarea-head">
-                                <span><i class="icon-Bold"></i></span>
-                                <span><i class="icon-Italic"></i></span>
-                                <span><i class="icon-Upload_Files"></i></span>
-                                <span><i class="icon-Emoticon"></i></span>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="create__section create__textarea">
+                                <label class="create__label" for="comment">Ваш комментарий</label>
+                                <div class="create__textarea-head">
+                                    <span><i class="icon-Emoticon"></i></span>
+                                    <input type="file" name="image" accept="image/*">
+                                </div>
+                                {{ comment_form.text }}
                             </div>
-                            <textarea class="form-control" id="comment" placeholder="Напишите ваш комментарий здесь..."></textarea>
-                        </div>
 
-                        <!-- Кнопка для отправки комментария -->
-                        <div class="create__footer">
-                            <a href="#" class="create__btn-cansel btn">Отмена</a>
-                            <a href="#" class="create__btn-create btn btn--type-02">Отправить</a>
-                        </div>
+                            <!-- Кнопка для отправки комментария -->
+                            <div class="create__footer">
+                                <button type="submit" class="create__btn-create btn btn--type-02">Отправить</button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>

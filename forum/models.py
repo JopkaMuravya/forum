@@ -23,3 +23,13 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    topic = models.ForeignKey(Topic, related_name='comments', on_delete=models.CASCADE)
+    author = models.CharField(max_length=50, verbose_name="Автор комментария")
+    text = models.TextField(verbose_name="Текст комментария")
+    image = models.ImageField(upload_to='comment_images/', blank=True, null=True, verbose_name="Изображение")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    def __str__(self):
+        return f"Комментарий от {self.author} к теме {self.topic}"

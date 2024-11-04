@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .forms import TopicForm
-from .models import Topic, Tag
+from .forms import TopicForm, CommentForm
+from .models import Topic, Tag, Comment
 
 CATEGORY_COLORS = {
     'hobby': ('bg-f9bc64', 'Хобби'),
@@ -84,4 +84,21 @@ def single_topic(request, id):
     color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
     topic.category_color = color
     topic.category_name = name
-    return render(request, 'forum/single-topic.html', {'topic': topic})
+
+    comments = Comment.objects.filter(topic=topic)
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST, request.FILES)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.topic = topic
+            comment.save()
+            return redirect('single_topic', id=topic.id)
+    else:
+        comment_form = CommentForm()
+
+    return render(request, 'forum/single-topic.html', {
+        'topic': topic,
+        'comments': comments,
+        'comment_form': comment_form,
+    })

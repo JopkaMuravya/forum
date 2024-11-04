@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topic
+from .models import Topic, Comment
 
 class TopicForm(forms.ModelForm):
     CATEGORY_CHOICES = [
@@ -47,4 +47,19 @@ class TopicForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите заголовок'})
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введите описание'})
         self.fields['tags'].widget.attrs.update({'class': 'form-control'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control'})
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text', 'image']
+        labels = {
+            'text': 'Текст комментария',
+            'image': 'Изображение',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите ваш комментарий здесь...'})
         self.fields['image'].widget.attrs.update({'class': 'form-control'})

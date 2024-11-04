@@ -9,7 +9,7 @@ urlpatterns = [
     path('create-topic/', views.create_topic, name='create-topic'),
     path('signup/', views.signup, name='signup'),
     path('signin/', views.signin, name='signin'),
-    path('topic/<int:id>/', views.single_topic, name='single-topic'),
+    path('topic/<int:id>/', views.single_topic, name='single_topic'),
 ]
 
 if settings.DEBUG:
