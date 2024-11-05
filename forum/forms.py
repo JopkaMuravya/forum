@@ -31,7 +31,7 @@ class UserRegistrationForm(forms.ModelForm):
 class CustomUser_ChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser 
-        fields = ['username', 'first_name', 'last_name', 'email', 'avatar']  # Добавьте поле аватара
+        fields = ['username', 'first_name', 'last_name', 'email', 'avatar']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),

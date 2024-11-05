@@ -1,8 +1,7 @@
-from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
 import random
+from django.contrib.auth.models import User, AbstractUser
+from mysite import settings
 
 
 class Tag(models.Model):
@@ -25,21 +24,36 @@ class Topic(models.Model):
     tags = models.ManyToManyField(Tag, verbose_name="Теги", blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     image = models.ImageField(upload_to='topic_images/', blank=True, null=True, verbose_name="Изображение")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Автор темы")
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True, verbose_name="Аватар темы")
 
     def __str__(self):
         return self.title
 
+
 class Comment(models.Model):
     topic = models.ForeignKey(Topic, related_name='comments', on_delete=models.CASCADE)
-    author = models.CharField(max_length=50, verbose_name="Автор комментария")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Автор комментария")
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True, verbose_name="Аватар комментария")
     text = models.TextField(verbose_name="Текст комментария")
     image = models.ImageField(upload_to='comment_images/', blank=True, null=True, verbose_name="Изображение")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
     def __str__(self):
-        return f"Комментарий от {self.author} к теме {self.topic}"
+        return f"Комментарий от {self.author.username} к теме {self.topic}"
 
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True)
+    email_verified = models.BooleanField(default=False)
     verification_token = models.CharField(max_length=255, blank=True, null=True)
+
+
+class Like(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, related_name='likes', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'topic')
+
