@@ -76,6 +76,7 @@ def main_str(request, category=None):
         color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
         topic.category_color = color
         topic.category_name = name
+        topic.comment_count = topic.comments.count()
 
     categories = CATEGORY_COLORS
     return render(request, 'forum/index.html', {

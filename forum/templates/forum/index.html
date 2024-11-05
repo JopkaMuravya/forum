@@ -184,7 +184,7 @@
                                     <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
                                 </div>
                             </div>
-                            <div class="posts__replies">0</div>
+                            <div class="posts__replies">{{ topic.comment_count }}</div>
                         </div>
                     </div>
                 {% empty %}
