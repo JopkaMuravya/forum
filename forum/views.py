@@ -1,12 +1,14 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, TopicForm, CommentForm, CustomUser_ChangeForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .forms import TopicForm, CommentForm, CustomUser_ChangeForm
-from .models import Topic, Tag, Comment, CustomUser
-from django.core.files.storage import FileSystemStorage
+from django.core.mail import send_mail
+import uuid
+from .models import Topic, Tag, Comment, Like, CustomUser
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
 
 
 def user_login(request):
@@ -29,14 +31,15 @@ def user_login(request):
     return render(request, 'forum/signin.html', {'form': form})
 
 
-
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
+            new_user.verification_token = str(uuid.uuid4())
             new_user.save()
+            send_verification_email(new_user)
             login(request, new_user)
             return redirect('main_str')
     else:
@@ -44,21 +47,45 @@ def register(request):
     return render(request, 'forum/simple-signup.html', {'user_form': user_form})
 
 
+def send_verification_email(user):
+    verification_link = f"http://localhost:8000/verify_email/{user.verification_token}/"
+    send_mail(
+        'Подтверждение электронной почты',
+        f'Перейдите по ссылке для подтверждения: {verification_link}',
+        'from@example.com',
+        [user.email],
+        fail_silently=False,
+    )
+
+
+def verify_email(request, token):
+    try:
+        user = CustomUser.objects.get(verification_token=token)
+        user.email_verified = True
+        user.verification_token = ''
+        user.save()
+        return redirect('main_str')
+    except CustomUser.DoesNotExist:
+        return render(request, 'forum/invalid_token.html')
+
+
+
 @login_required
 def user_account(request):
-    user = request.user  # Получаем текущего пользователя
+    user = request.user
 
     if request.method == 'POST':
         user_form = CustomUser_ChangeForm(request.POST, request.FILES, instance=user)
         if user_form.is_valid():
-            user_form.save()  # Сохраняем изменения в модели
-            return redirect('main_str')  # Перенаправление на главную страницу
+            user_form.save()
+            return redirect('main_str')
     else:
         user_form = CustomUser_ChangeForm(instance=user)
 
     avatar_url = user.avatar.url if hasattr(user, 'avatar') and user.avatar else None
 
     return render(request, 'forum/acaunt.html', {'user_form': user_form, 'avatar_url': avatar_url})
+
 
 
 
@@ -84,8 +111,10 @@ def main_str(request, category=None):
     search_query = request.GET.get('q', '')
     selected_tags = request.GET.getlist('tags')
     tags = Tag.objects.all()
-
     topics = Topic.objects.all()
+
+    if request.GET.get('liked_topics') == 'true' and request.user.is_authenticated:
+        topics = topics.filter(likes__user=request.user)
 
     if category:
         topics = topics.filter(category=category)
@@ -103,6 +132,7 @@ def main_str(request, category=None):
         color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
         topic.category_color = color
         topic.category_name = name
+        topic.comment_count = topic.comments.count()
 
     categories = CATEGORY_COLORS
     return render(request, 'forum/index.html', {
@@ -119,6 +149,8 @@ def create_topic(request):
         form = TopicForm(request.POST, request.FILES)
         if form.is_valid():
             topic = form.save(commit=False)
+            topic.author = request.user
+            topic.avatar = request.user.avatar.url
             topic.save()
 
             tags_input = form.cleaned_data['tags']
@@ -140,14 +172,17 @@ def single_topic(request, id):
     color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
     topic.category_color = color
     topic.category_name = name
-
     comments = Comment.objects.filter(topic=topic)
+
+    user_liked = topic.likes.filter(id=request.user.id).exists()
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST, request.FILES)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.topic = topic
+            comment.author = request.user
+            comment.avatar = request.user.avatar.url
             comment.save()
             return redirect('single_topic', id=topic.id)
     else:
@@ -157,4 +192,22 @@ def single_topic(request, id):
         'topic': topic,
         'comments': comments,
         'comment_form': comment_form,
+        'user_liked': user_liked,
+    })
+
+
+@login_required
+def toggle_like(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+    like, created = Like.objects.get_or_create(user=request.user, topic=topic)
+
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    return JsonResponse({
+        'liked': liked,
+        'total_likes': topic.likes.count(),
     })
