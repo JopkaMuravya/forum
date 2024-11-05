@@ -223,10 +223,10 @@
                                 {% endif %}
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                            <span>0</span>
-                                        </div>
+                                        <a href="#" class="like-button" data-topic-id="{{ topic.id }}">
+                                            <i class="icon-Favorite_Topic"></i>
+                                        </a>
+                                        <span class="like-count" style="margin-left: 5px;">{{ topic.likes.count }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -338,6 +338,30 @@
                     picker.showPicker(button);
                     isPickerVisible = true;
                 }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const topicId = this.getAttribute('data-topic-id');
+                    const likeCount = this.nextElementSibling;
+
+                    fetch(`/like/${topicId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        likeCount.textContent = data.total_likes;
+                    });
+                });
             });
         });
     </script>

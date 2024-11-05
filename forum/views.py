@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, UserRegistrationForm, TopicForm, CommentForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .models import Topic, Tag, Comment
+from .models import Topic, Tag, Comment, Like
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 def user_login(request):
     logout(request)
@@ -115,6 +117,8 @@ def single_topic(request, id):
     topic.category_name = name
     comments = Comment.objects.filter(topic=topic)
 
+    user_liked = topic.likes.filter(id=request.user.id).exists()
+
     if request.method == 'POST':
         comment_form = CommentForm(request.POST, request.FILES)
         if comment_form.is_valid():
@@ -130,4 +134,22 @@ def single_topic(request, id):
         'topic': topic,
         'comments': comments,
         'comment_form': comment_form,
+        'user_liked': user_liked,
+    })
+
+
+@login_required
+def toggle_like(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+    like, created = Like.objects.get_or_create(user=request.user, topic=topic)
+
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    return JsonResponse({
+        'liked': liked,
+        'total_likes': topic.likes.count(),
     })
