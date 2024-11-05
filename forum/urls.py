@@ -12,6 +12,7 @@ urlpatterns = [
     path('signin/', views.user_login, name='signin'),
     path('topic/<int:id>/', views.single_topic, name='single_topic'),
     path('like/<int:topic_id>/', views.toggle_like, name='toggle_like'),
+    path('acaunt/', views.user_account, name='acaunt'),
 ]
 
 if settings.DEBUG:

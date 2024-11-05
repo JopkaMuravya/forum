@@ -31,10 +31,29 @@
     <![endif]-->
 
     <style>
+        .main__bg {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; 
+            background-image: url('{% static "images/87.jpg" %}'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+            z-index: -1; 
+        }
         .posts__item {
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 20px;
             margin-bottom: 20px;
+        }
+        .header__user-btn img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
         }
     </style>
 
@@ -49,7 +68,7 @@
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
                     <div class="header__title">Skuforum</div>
-                </div>                
+                </div>
                 <div class="header__search">
                     <form action="{% url 'main_str' %}" method="get">
                         <label>
@@ -71,59 +90,64 @@
                             </a>
                         </div>
                     </div>
-                </div>                
+                </div>
                 <div class="header__user">
                     <div class="header__user-btn" data-dropdown-btn="user">
                         {% if request.user.is_authenticated %}
-                            <img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar">
-                            {{ request.user }}<i class="icon-Arrow_Below"></i>
+                        {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" alt="avatar">
                         {% else %}
-                            <img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar">
-                            Анонимус<i class="icon-Arrow_Below"></i>
+                        <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
                         {% endif %}
+                        {{ request.user }}<i class="icon-Arrow_Below"></i>
+                        {% else %}
+                        <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
+                        Анонимус<i class="icon-Arrow_Below"></i>
+                        {% endif %}
+
                     </div>
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
                                 <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
                                 <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
-                                <a href="#"><i class="icon-Preferences"></i></a>
+                                <a href="{% url 'acaunt' %}"><i class="icon-Preferences"></i></a>
                                 {% if request.user.is_authenticated %}
-                                    <a href="{% url 'signin' %}"><i class="icon-Logout"></i></a>
+                                <a href="{% url 'signin' %}"><i class="icon-Logout"></i></a>
                                 {% else %}
-                                    <a href="{% url 'signup' %}"><i class="icon-Logout"></i></a>
+                                <a href="{% url 'signup' %}"><i class="icon-Logout"></i></a>
                                 {% endif %}
                             </div>
                         </div>
-                        <div>
-                        </div>
                     </nav>
                 </div>
-            </div>
-            <div class="header__offset-btn">
-                <a href="{% url 'create-topic' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+                <div class="header__offset-btn">
+                    <a href="{% url 'create-topic' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- MAIN -->
     <main>
+        <div class="main__bg"></div>
+
         <div class="container">
             <div class="nav">
                 <div class="nav__categories js-dropdown">
-                   <div class="nav__select">
+                    <div class="nav__select">
                         <div class="btn-select" data-dropdown-btn="categories">Все категории</div>
                         <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
                             <ul class="dropdown__catalog row">
                                 <li class="col-xs-12"><a href="{% url 'main_str' %}">Все категории</a></li>
                                 {% for key, value in categories.items %}
-                                    {% with color_class=value.0 category_name=value.1 %}
-                                        <li class="col-xs-6">
-                                            <a href="{% url 'category_filter' key %}" class="category">
-                                                <i class="{{ color_class }}"></i>{{ category_name }}
-                                            </a>
-                                        </li>
-                                    {% endwith %}
+                                {% with color_class=value.0 category_name=value.1 %}
+                                <li class="col-xs-6">
+                                    <a href="{% url 'category_filter' key %}" class="category">
+                                        <i class="{{ color_class }}"></i>{{ category_name }}
+                                    </a>
+                                </li>
+                                {% endwith %}
                                 {% endfor %}
                             </ul>
                         </nav>
@@ -136,17 +160,17 @@
                                     Все теги
                                 </a>
                                 {% for tag in tags %}
-                                    <a href="{% url 'main_str' %}?{% if selected_tags %}tags={{ selected_tags|join:'&tags=' }}&{% endif %}tags={{ tag.id }}"
-                                       class="tag {% if tag.id in selected_tags %}selected{% endif %}"
-                                       style="background-color: {% if tag.id in selected_tags %}#ccc{% else %}{{ tag.color }}{% endif %};">
-                                        {{ tag.name }}
-                                    </a>
+                                <a href="{% url 'main_str' %}?{% if selected_tags %}tags={{ selected_tags|join:'&tags=' }}&{% endif %}tags={{ tag.id }}"
+                                   class="tag {% if tag.id in selected_tags %}selected{% endif %}"
+                                   style="background-color: {% if tag.id in selected_tags %}#ccc{% else %}{{ tag.color }}{% endif %};">
+                                    {{ tag.name }}
+                                </a>
                                 {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="posts">
                 <div class="posts__head">
                     <div class="posts__topic">Тема</div>
@@ -154,8 +178,8 @@
                     <div class="posts__users">Автор</div>
                     <div class="posts__replies">Ответы</div>
                 </div>
-               <div class="posts__body">
-                {% for topic in topics %}
+                <div class="posts__body">
+                    {% for topic in topics %}
                     <div class="posts__item">
                         <div class="posts__section-left">
                             <div class="posts__topic">
@@ -166,19 +190,19 @@
                                     <p>{{ topic.description|truncatewords:20 }}</p>
                                     <div class="posts__tags tags">
                                         {% for tag in topic.tags.all %}
-                                            <a href="#" style="background-color: {{ tag.color }};">{{ tag.name }}</a>
+                                        <a href="#" style="background-color: {{ tag.color }};">{{ tag.name }}</a>
                                         {% endfor %}
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="posts__section-right">
                             <div class="posts__category">
                                 <a href="#" class="category">
                                     <i class="{{ topic.category_color }}"></i>
                                     {{ topic.category_name }}
                                 </a>
                             </div>
-                        </div>
-                        <div class="posts__section-right">
                             <div class="posts__users">
                                 <div>
                                     <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
@@ -187,13 +211,13 @@
                             <div class="posts__replies">{{ topic.comment_count }}</div>
                         </div>
                     </div>
-                {% empty %}
-                <p>На данный момент нет тем для отображения.</p>
-                {% endfor %}
+                    {% empty %}
+                    <p>На данный момент нет тем для отображения.</p>
+                    {% endfor %}
 
                 </div>
-                </div>                
             </div>
+        </div>
     </main>
 
     <!-- JAVA SCRIPT -->

@@ -41,11 +41,11 @@ class Comment(models.Model):
         return f"Комментарий от {self.author.username} к теме {self.topic}"
 
 
-
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True)
     email_verified = models.BooleanField(default=False)
     verification_token = models.CharField(max_length=255, blank=True, null=True)
+
 
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -54,5 +54,4 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'topic')
-
 

@@ -28,6 +28,17 @@ class UserRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
+class CustomUser_ChangeForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser 
+        fields = ['username', 'first_name', 'last_name', 'email', 'avatar']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+
 class TopicForm(forms.ModelForm):
     CATEGORY_CHOICES = [
         ('hobby', 'Хобби'),

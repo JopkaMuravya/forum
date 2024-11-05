@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm, UserRegistrationForm, TopicForm, CommentForm
+from .forms import LoginForm, UserRegistrationForm, TopicForm, CommentForm, CustomUser_ChangeForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.mail import send_mail
@@ -8,6 +8,7 @@ import uuid
 from .models import Topic, Tag, Comment, Like, CustomUser
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+
 
 
 def user_login(request):
@@ -28,6 +29,7 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'forum/signin.html', {'form': form})
+
 
 def register(request):
     if request.method == 'POST':
@@ -65,6 +67,26 @@ def verify_email(request, token):
         return redirect('main_str')
     except CustomUser.DoesNotExist:
         return render(request, 'forum/invalid_token.html')
+
+
+
+@login_required
+def user_account(request):
+    user = request.user
+
+    if request.method == 'POST':
+        user_form = CustomUser_ChangeForm(request.POST, request.FILES, instance=user)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('main_str')
+    else:
+        user_form = CustomUser_ChangeForm(instance=user)
+
+    avatar_url = user.avatar.url if hasattr(user, 'avatar') and user.avatar else None
+
+    return render(request, 'forum/acaunt.html', {'user_form': user_form, 'avatar_url': avatar_url})
+
+
 
 
 CATEGORY_COLORS = {
