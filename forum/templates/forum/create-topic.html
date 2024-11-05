@@ -108,8 +108,8 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
-                                <a href="#"><i class="icon-Bookmark"></i></a>
-                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
+                                <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
                                 <a href="#"><i class="icon-Preferences"></i></a>
                                 <a href="#"><i class="icon-Logout"></i></a>
                             </div>

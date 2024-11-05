@@ -11,6 +11,7 @@ urlpatterns = [
     path('verify_email/<str:token>/', views.verify_email, name='verify_email'),
     path('signin/', views.user_login, name='signin'),
     path('topic/<int:id>/', views.single_topic, name='single_topic'),
+    path('like/<int:topic_id>/', views.toggle_like, name='toggle_like'),
 ]
 
 if settings.DEBUG:

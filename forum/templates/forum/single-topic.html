@@ -167,8 +167,8 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
-                                <a href="#"><i class="icon-Bookmark"></i></a>
-                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
+                                <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
                                 <a href="#"><i class="icon-Preferences"></i></a>
                                 <a href="#"><i class="icon-Logout"></i></a>
                             </div>
@@ -207,9 +207,9 @@
                                     <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
                                 </div>
                                 <div class="topic__caption">
-                                    <div class="topic__name">
-                                        <a href="#">Автор темы</a>
-                                    </div>
+                                     <div class="topic__name">
+                                            <a href="#">{{ topic.author.username }}</a>
+                                     </div>
                                     <div class="topic__date"><i class="icon-Watch_Later"></i>{{ topic.created_at|date:"d M, Y" }}</div>
                                 </div>
                             </div>
@@ -223,10 +223,10 @@
                                 {% endif %}
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                            <span>0</span>
-                                        </div>
+                                        <a href="#" class="like-button" data-topic-id="{{ topic.id }}">
+                                            <i class="icon-Favorite_Topic"></i>
+                                        </a>
+                                        <span class="like-count" style="margin-left: 5px;">{{ topic.likes.count }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">
-                                        <a href="#">Автор комментария</a>
+                                        <a href="#">{{ comment.author.username }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -338,6 +338,30 @@
                     picker.showPicker(button);
                     isPickerVisible = true;
                 }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const topicId = this.getAttribute('data-topic-id');
+                    const likeCount = this.nextElementSibling;
+
+                    fetch(`/like/${topicId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        likeCount.textContent = data.total_likes;
+                    });
+                });
             });
         });
     </script>
