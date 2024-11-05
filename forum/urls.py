@@ -13,6 +13,7 @@ urlpatterns = [
     path('topic/<int:id>/', views.single_topic, name='single_topic'),
     path('like/<int:topic_id>/', views.toggle_like, name='toggle_like'),
     path('acaunt/', views.user_account, name='acaunt'),
+    path('mark_notifications_read/', views.mark_notifications_read, name='mark_notifications_read'),
 ]
 
 if settings.DEBUG:
