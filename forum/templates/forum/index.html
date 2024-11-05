@@ -55,6 +55,22 @@
             object-fit: cover;
             border: 1px solid #ccc;
         }
+
+        .notification-list {
+            padding: 10px;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 14px;
+        }
+
+        .notification-item i {
+            margin-right: 8px;
+            color: #555;
+        }
     </style>
 
 </head>
@@ -80,15 +96,32 @@
                 <div class="header__notification">
                     <div class="header__notification-btn" data-dropdown-btn="notification">
                         <i class="icon-Notification"></i>
-                        <span>1</span>
+                        {% if unread_notifications_count > 0 %}
+                            <span>{{ unread_notifications_count }}</span>
+                        {% endif %}
                     </div>
                     <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
-                        <div>
-                            <a href="#">
-                                <i class="icon-Info"></i>
-                                <p>Здесь будут уведомления<span>Новых уведомлений пока нет</span></p>
-                            </a>
-                        </div>
+                        {% if notifications.count > 0 %}
+                            <div class="notification-list">
+                                {% for notification in notifications %}
+                                    <a href="#" class="notification-item">
+                                        <i class="icon-Info"></i>
+                                        {% if notification.notification_type == 'like' %}
+                                            Вашу тему "{{ notification.topic.title|truncatechars:20 }}" лайкнули!
+                                        {% elif notification.notification_type == 'reply' %}
+                                            На вашу тему "{{ notification.topic.title|truncatechars:20 }}" ответили!
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div>
+                                <a href="#">
+                                    <i class="icon-Info"></i>
+                                    <p>Здесь будут уведомления<span>Новых уведомлений пока нет</span></p>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="header__user">
@@ -224,6 +257,33 @@
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const notificationButton = document.querySelector('.header__notification-btn');
+
+            notificationButton.addEventListener('click', function () {
+                fetch('/mark_notifications_read/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        const notificationCount = document.querySelector('.header__notification-btn span');
+                        if (notificationCount) {
+                            notificationCount.textContent = '';
+                        }
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+            });
+        });
+    </script>
+
 
 </body>
 </html>

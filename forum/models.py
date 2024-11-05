@@ -55,3 +55,12 @@ class Like(models.Model):
     class Meta:
         unique_together = ('user', 'topic')
 
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    notification_type = models.CharField(max_length=10, choices=[('like', 'Like'), ('reply', 'Reply')])
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user} - {self.notification_type} on {self.topic.title}"

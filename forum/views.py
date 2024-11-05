@@ -5,9 +5,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.mail import send_mail
 import uuid
-from .models import Topic, Tag, Comment, Like, CustomUser
+from .models import Topic, Tag, Comment, Like, Notification, CustomUser
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 
@@ -134,6 +135,12 @@ def main_str(request, category=None):
         topic.category_name = name
         topic.comment_count = topic.comments.count()
 
+    unread_notifications_count = 0
+    notifications = []
+    if request.user.is_authenticated:
+        unread_notifications_count = request.user.notification_set.filter(is_read=False).count()
+        notifications = request.user.notification_set.order_by('-created_at')
+
     categories = CATEGORY_COLORS
     return render(request, 'forum/index.html', {
         'topics': topics,
@@ -141,6 +148,8 @@ def main_str(request, category=None):
         'tags': tags,
         'selected_tags': list(map(int, selected_tags)),
         'search_query': search_query,
+        'unread_notifications_count': unread_notifications_count,
+        'notifications': notifications,
     })
 
 
@@ -182,6 +191,14 @@ def single_topic(request, id):
             comment.topic = topic
             comment.author = request.user
             comment.save()
+            if topic.author != request.user:
+                Notification.objects.create(
+                    user=topic.author,
+                    topic=topic,
+                    notification_type='reply',
+                    created_at=timezone.now(),
+                    is_read=False
+                )
             return redirect('single_topic', id=topic.id)
     else:
         comment_form = CommentForm()
@@ -204,8 +221,24 @@ def toggle_like(request, topic_id):
         liked = False
     else:
         liked = True
+        if topic.author != request.user:
+            Notification.objects.create(
+                user=topic.author,
+                topic=topic,
+                notification_type='like',
+                created_at=timezone.now(),
+                is_read=False
+            )
 
     return JsonResponse({
         'liked': liked,
         'total_likes': topic.likes.count(),
     })
+
+
+@login_required
+def mark_notifications_read(request):
+    if request.method == 'POST':
+        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'}, status=400)
