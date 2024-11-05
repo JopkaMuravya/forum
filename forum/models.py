@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import random
 
@@ -38,3 +39,7 @@ class Comment(models.Model):
     def __str__(self):
         return f"Комментарий от {self.author} к теме {self.topic}"
 
+
+class CustomUser(AbstractUser):
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True)
+    verification_token = models.CharField(max_length=255, blank=True, null=True)
