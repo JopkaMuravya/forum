@@ -55,6 +55,22 @@
             object-fit: cover;
             border: 1px solid #ccc;
         }
+
+        .posts__body > p {
+            color: azure;
+            font-size: 24px;
+            margin-top: 15%;
+            margin-left: 28%;
+        }
+
+        .posts__users img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+
     </style>
 
 </head>
@@ -109,8 +125,8 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
-                                <a href="#"><i class="icon-Bookmark"></i></a>
-                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
+                                <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
                                 <a href="{% url 'acaunt' %}"><i class="icon-Preferences"></i></a>
                                 {% if request.user.is_authenticated %}
                                 <a href="{% url 'signin' %}"><i class="icon-Logout"></i></a>
@@ -205,10 +221,10 @@
                             </div>
                             <div class="posts__users">
                                 <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
+                                    <img src="{{ topic.avatar }}" alt="avatar"></a>
                                 </div>
                             </div>
-                            <div class="posts__replies">0</div>
+                            <div class="posts__replies">{{ topic.comment_count }}</div>
                         </div>
                     </div>
                     {% empty %}
