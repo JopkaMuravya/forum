@@ -1,0 +1,346 @@
+<!doctype html>
+{% load static %}
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+    <!-- STYLESHEET -->
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="{% static 'fonts/icons/main/mainfont/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/icons/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 8px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #ffffff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .topic-image {
+            max-width: 300px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: -25px;
+        }
+
+        .comment-image {
+            max-width: 300px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .create__footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .emoji-picker__nav,
+        .emoji-picker__tabs,
+        .emoji-picker__tab-list {
+            display: none !important;
+        }
+
+        .emoji-picker__preview,
+        .emoji-picker__preview-text,
+        .emoji-picker__preview-emoji {
+            display: none !important;
+        }
+
+        .emoji-picker__picker {
+            width: 400px !important;
+            height: 350px !important;
+        }
+
+        .emoji-picker__emoji {
+            font-size: 1.8em !important;
+        }
+
+        .emoji-picker__header,
+        .emoji-picker__nav {
+            display: none !important;
+        }
+
+        .emoji-picker__picker {
+            padding-top: 0 !important;
+            height: auto !important;
+        }
+
+        .emoji-picker__category-label {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header js-header js-dropdown">
+            <div class="container">
+                <div class="header__logo">
+                    <h1>
+                        <img src="{% static 'images/logo_forum.png' %}" alt="logo">
+                    </h1>
+                    <div class="header__title">Skuforum</div>
+                </div>
+                <div class="header__search">
+                    <form action="#">
+                        <label>
+                            <i class="icon-Search js-header-search-btn-open"></i>
+                            <input type="search" placeholder="Искать" class="form-control">
+                        </label>
+                    </form>
+                </div>
+                <div class="header__notification">
+                    <div class="header__notification-btn" data-dropdown-btn="notification">
+                        <i class="icon-Notification"></i>
+                        <span>1</span>
+                    </div>
+                    <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
+                        <div>
+                            <a href="#">
+                                <i class="icon-Info"></i>
+                                <p>Здесь будут уведомления<span>Новых уведомлений пока нет</span></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="header__user">
+                    <div class="header__user-btn" data-dropdown-btn="user">
+                        <img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar">
+                        Анонимус<i class="icon-Arrow_Below"></i>
+                    </div>
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
+                        <div>
+                            <div class="dropdown__icons">
+                                <a href="#"><i class="icon-Bookmark"></i></a>
+                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="#"><i class="icon-Preferences"></i></a>
+                                <a href="#"><i class="icon-Logout"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <div class="header__offset-btn">
+                <a href="{% url 'create-topic' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+        <div class="container">
+            <div class="topics">
+                <div class="topics__heading">
+                    <h2 class="topics__heading-title">{{ topic.title }}</h2>
+                    <div class="topics__heading-info">
+                        <a href="#" class="category"><i class="{{ topic.category_color }}"></i> {{ topic.category_name }}</a>
+                        <div class="tags">
+                            {% for tag in topic.tags.all %}
+                                <a href="#" style="background-color: {{ tag.color }};">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="topics__body">
+                    <div class="topics__content">
+                        <div class="topic">
+                            <div class="topic__head">
+                                <div class="topic__avatar">
+                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
+                                </div>
+                                <div class="topic__caption">
+                                    <div class="topic__name">
+                                        <a href="#">Автор темы</a>
+                                    </div>
+                                    <div class="topic__date"><i class="icon-Watch_Later"></i>{{ topic.created_at|date:"d M, Y" }}</div>
+                                </div>
+                            </div>
+                            <div class="topic__content">
+                                <div class="topic__text">
+                                    <p>{{ topic.description }}</p>
+                                </div>
+
+                                {% if topic.image %}
+                                    <img src="{{ topic.image.url }}" alt="Topic Image" class="topic-image" onclick="openModal(this.src)">
+                                {% endif %}
+                                <div class="topic__footer">
+                                    <div class="topic__footer-likes">
+                                        <div>
+                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
+                                            <span>0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Отображение комментариев -->
+                        {% for comment in comments %}
+                        <div class="topic topic--comment">
+                            <div class="topic__head">
+                                <div class="topic__avatar">
+                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
+                                </div>
+                                <div class="topic__caption">
+                                    <div class="topic__name">
+                                        <a href="#">Автор комментария</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topic__content">
+                                <div class="topic__text">
+                                    <p>{{ comment.text }}</p>
+                                    {% if comment.image %}
+                                        <img src="{{ comment.image.url }}" alt="Comment Image" class="comment-image" onclick="openModal(this.src)">
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Форма для комментариев -->
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="create__section create__textarea">
+                                <label class="create__label">Ваш комментарий</label>
+                                <div class="create__textarea-head">
+                                    <span><i class="icon-Emoticon" id="emoji-trigger"></i></span>
+                                    <input type="file" name="image" accept="image/*">
+                                </div>
+                                {{ comment_form.text }}
+                            </div>
+
+                            <!-- Кнопка для отправки комментария -->
+                            <div class="create__footer">
+                                <button type="submit" class="create__btn-create btn btn--type-02">Отправить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/emoji-button.min.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById("imageModal");
+            const modalImage = document.getElementById("modalImage");
+            const closeBtn = document.querySelector(".close");
+
+            function openModal(imageSrc) {
+                modal.style.display = "block";
+                modalImage.src = imageSrc;
+            }
+
+            function closeModal() {
+                modal.style.display = "none";
+                modalImage.src = "";
+            }
+
+            document.querySelectorAll('.topic-image, .comment-image').forEach(img => {
+                img.addEventListener('click', function() {
+                    openModal(this.src);
+                });
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+
+            const button = document.querySelector('#emoji-trigger');
+            const input = document.querySelector('textarea[name="text"]');
+            const picker = new EmojiButton({
+                position: 'top-end',
+                autoHide: false,
+                theme: 'light',
+                showSearch: false
+            });
+
+            let isPickerVisible = false;
+
+            picker.on('emoji', emoji => {
+                input.setRangeText(emoji, input.selectionStart, input.selectionEnd, 'end');
+                picker.hidePicker();
+                isPickerVisible = false;
+            });
+
+            button.addEventListener('click', () => {
+                if (isPickerVisible) {
+                    picker.hidePicker();
+                    isPickerVisible = false;
+                } else {
+                    picker.showPicker(button);
+                    isPickerVisible = true;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
