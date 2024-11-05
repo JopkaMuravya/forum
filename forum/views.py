@@ -1,12 +1,9 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, TopicForm, CommentForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .forms import TopicForm, CommentForm
 from .models import Topic, Tag, Comment
-
 
 def user_login(request):
     logout(request)
@@ -27,7 +24,6 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'forum/signin.html', {'form': form})
 
-
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -40,8 +36,6 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'forum/simple-signup.html', {'user_form': user_form})
-
-
 
 CATEGORY_COLORS = {
     'hobby': ('bg-f9bc64', 'Хобби'),
@@ -60,12 +54,10 @@ CATEGORY_COLORS = {
     'politics': ('bg-368f8b', 'Политика'),
 }
 
-
 def main_str(request, category=None):
     search_query = request.GET.get('q', '')
     selected_tags = request.GET.getlist('tags')
     tags = Tag.objects.all()
-
     topics = Topic.objects.all()
 
     if category:
@@ -94,12 +86,12 @@ def main_str(request, category=None):
         'search_query': search_query,
     })
 
-
 def create_topic(request):
     if request.method == 'POST':
         form = TopicForm(request.POST, request.FILES)
         if form.is_valid():
             topic = form.save(commit=False)
+            topic.author = request.user
             topic.save()
 
             tags_input = form.cleaned_data['tags']
@@ -115,13 +107,11 @@ def create_topic(request):
         form = TopicForm()
     return render(request, 'forum/create-topic.html', {'form': form})
 
-
 def single_topic(request, id):
     topic = get_object_or_404(Topic, id=id)
     color, name = CATEGORY_COLORS.get(topic.category, ('bg-default', 'Категория'))
     topic.category_color = color
     topic.category_name = name
-
     comments = Comment.objects.filter(topic=topic)
 
     if request.method == 'POST':
@@ -129,6 +119,7 @@ def single_topic(request, id):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.topic = topic
+            comment.author = request.user
             comment.save()
             return redirect('single_topic', id=topic.id)
     else:

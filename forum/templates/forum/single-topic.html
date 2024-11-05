@@ -207,9 +207,9 @@
                                     <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
                                 </div>
                                 <div class="topic__caption">
-                                    <div class="topic__name">
-                                        <a href="#">Автор темы</a>
-                                    </div>
+                                     <div class="topic__name">
+                                            <a href="#">{{ topic.author.username }}</a>
+                                     </div>
                                     <div class="topic__date"><i class="icon-Watch_Later"></i>{{ topic.created_at|date:"d M, Y" }}</div>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">
-                                        <a href="#">Автор комментария</a>
+                                        <a href="#">{{ comment.author.username }}</a> <!-- Имя автора комментария -->
                                     </div>
                                 </div>
                             </div>
