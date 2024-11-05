@@ -109,7 +109,7 @@
                     <h1>
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
-                    <div class="header__title">Skuforum</div>
+                    <div class="header__title"><a href="{% url 'main_str' %}">Skuforum</a></div>
                 </div>
                 <div class="header__notification">
                     <div class="header__notification-btn" data-dropdown-btn="notification">
@@ -144,7 +144,7 @@
                             <div class="dropdown__icons">
                                 <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
                                 <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
-                                <a href="#"><i class="icon-Preferences"></i></a>
+                                <a href="{% url 'acaunt' %}"><i class="icon-Preferences"></i></a>
                                 {% if request.user.is_authenticated %}
                                 <a href="{% url 'signin' %}"><i class="icon-Logout"></i></a>
                                 {% else %}

@@ -8,7 +8,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Responsive HTML5 Template">
     <meta name="author" content="author.com">
-    <title>Responsive HTML5 Template</title>
+    <title>Топик</title>
 
     <!-- STYLESHEET -->
     <!-- fonts -->
@@ -171,7 +171,7 @@
                     <h1>
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
-                    <div class="header__title">Skuforum</div>
+                    <div class="header__title"><a href="{% url 'main_str' %}">Skuforum</a></div>
                 </div>
                 <div class="header__notification">
                     <div class="header__notification-btn" data-dropdown-btn="notification">
@@ -204,12 +204,15 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
+                                {% if request.user.is_authenticated %}
                                 <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
                                 <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
-                                <a href="#"><i class="icon-Preferences"></i></a>
-                                {% if request.user.is_authenticated %}
+                                <a href="{% url 'acaunt' %}"><i class="icon-Preferences"></i></a>
                                 <a href="{% url 'signin' %}"><i class="icon-Logout"></i></a>
                                 {% else %}
+                                <a href="{% url 'signup' %}"><i class="icon-Favorite_Topic"></i></a>
+                                <a href="{% url 'signup' %}"><i class="icon-Message"></i></a>
+                                <a href="{% url 'signup' %}"><i class="icon-Preferences"></i></a>
                                 <a href="{% url 'signup' %}"><i class="icon-Logout"></i></a>
                                 {% endif %}
                             </div>
@@ -309,7 +312,11 @@
 
                             <!-- Кнопка для отправки комментария -->
                             <div class="create__footer">
+                                {% if request.user.is_authenticated %}
                                 <button type="submit" class="create__btn-create btn btn--type-02">Отправить</button>
+                                {% else %}
+                                <a href="{% url 'signup' %}" class="create__btn-create btn btn--type-02">Отправить</a>
+                                {% endif %}
                             </div>
                         </form>
                     </div>
