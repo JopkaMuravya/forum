@@ -114,6 +114,9 @@ def main_str(request, category=None):
     tags = Tag.objects.all()
     topics = Topic.objects.all()
 
+    if request.GET.get('my_topics') == 'true' and request.user.is_authenticated:
+        topics = topics.filter(author=request.user)
+
     if request.GET.get('liked_topics') == 'true' and request.user.is_authenticated:
         topics = topics.filter(likes__user=request.user)
 
