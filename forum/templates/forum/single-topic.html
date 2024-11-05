@@ -50,14 +50,11 @@
                 border-right: none;
             }
 
-            .header__notification {
+            .header__user {
                 margin-left: auto;
                 margin-right: 24px;
             }
 
-            .header__notification-btn > span {
-                right: -7px;
-            }
         }
         .modal {
             display: none;
@@ -160,6 +157,20 @@
             object-fit: cover;
             border: 1px solid #ccc;
         }
+
+        .topic__avatar img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            margin-top: -8px;
+        }
+        
+        .create__label {
+            color: #e9ecee;
+        }
+
     </style>
 </head>
 <body>
@@ -172,20 +183,6 @@
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
                     <div class="header__title"><a href="{% url 'main_str' %}">Skuforum</a></div>
-                </div>
-                <div class="header__notification">
-                    <div class="header__notification-btn" data-dropdown-btn="notification">
-                        <i class="icon-Notification"></i>
-                        <span>1</span>
-                    </div>
-                    <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
-                        <div>
-                            <a href="#">
-                                <i class="icon-Info"></i>
-                                <p>Здесь будут уведомления<span>Новых уведомлений пока нет</span></p>
-                            </a>
-                        </div>
-                    </div>
                 </div>
                 <div class="header__user">
                     <div class="header__user-btn" data-dropdown-btn="user">
@@ -247,7 +244,8 @@
                         <div class="topic">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
+                                    <img src="{{ topic.avatar }}" alt="avatar">
+                                    <!--<a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>-->
                                 </div>
                                 <div class="topic__caption">
                                      <div class="topic__name">
@@ -279,7 +277,7 @@
                         <div class="topic topic--comment">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
+                                    <img src="{{ comment.avatar }}" alt="avatar">
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">

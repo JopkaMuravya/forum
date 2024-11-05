@@ -25,6 +25,7 @@ class Topic(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     image = models.ImageField(upload_to='topic_images/', blank=True, null=True, verbose_name="Изображение")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Автор темы")
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True, verbose_name="Аватар темы")
 
     def __str__(self):
         return self.title
@@ -33,6 +34,7 @@ class Topic(models.Model):
 class Comment(models.Model):
     topic = models.ForeignKey(Topic, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Автор комментария")
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True, verbose_name="Аватар комментария")
     text = models.TextField(verbose_name="Текст комментария")
     image = models.ImageField(upload_to='comment_images/', blank=True, null=True, verbose_name="Изображение")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
@@ -54,6 +56,7 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'topic')
+
 
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

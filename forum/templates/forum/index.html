@@ -56,6 +56,7 @@
             border: 1px solid #ccc;
         }
 
+<<<<<<< HEAD
         .notification-list {
             padding: 10px;
         }
@@ -71,6 +72,23 @@
             margin-right: 8px;
             color: #555;
         }
+=======
+        .posts__body > p {
+            color: azure;
+            font-size: 24px;
+            margin-top: 15%;
+            margin-left: 28%;
+        }
+
+        .posts__users img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+
+>>>>>>> origin/Ira
     </style>
 
 </head>
@@ -245,7 +263,7 @@
                             </div>
                             <div class="posts__users">
                                 <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
+                                    <img src="{{ topic.avatar }}" alt="avatar"></a>
                                 </div>
                             </div>
                             <div class="posts__replies">{{ topic.comment_count }}</div>

@@ -46,18 +46,15 @@
 
         @media only screen and (min-width: 1040px) {
             .header__logo {
-                margin-left: 15px;
+                margin-left: 220px;
                 border-right: none;
             }
 
-            .header__notification {
+            .header__user {
                 margin-left: auto;
-                margin-right: 24px;
+                margin-right: 200px;
             }
 
-            .header__notification-btn > span {
-                right: -7px;
-            }
         }
 
         .avatar-preview {
@@ -98,20 +95,6 @@
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
                     <div class="header__title"><a href="{% url 'main_str' %}">Skuforum</a></div>
-                </div>
-                <div class="header__notification">
-                    <div class="header__notification-btn" data-dropdown-btn="notification">
-                        <i class="icon-Notification"></i>
-                        <span>1</span>
-                    </div>
-                    <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
-                        <div>
-                            <a href="#">
-                                <i class="icon-Info"></i>
-                                <p>Здесь будут уведомления<span>Новых уведомлений пока нет</span></p>
-                            </a>
-                        </div>
-                    </div>
                 </div>
                 <div class="header__user">
                     <div class="header__user-btn" data-dropdown-btn="user">

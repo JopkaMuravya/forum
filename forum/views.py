@@ -6,9 +6,10 @@ from django.db.models import Q
 from django.core.mail import send_mail
 import uuid
 from .models import Topic, Tag, Comment, Like, Notification, CustomUser
+from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
+
 
 
 
@@ -88,8 +89,6 @@ def user_account(request):
     return render(request, 'forum/acaunt.html', {'user_form': user_form, 'avatar_url': avatar_url})
 
 
-
-
 CATEGORY_COLORS = {
     'hobby': ('bg-f9bc64', 'Хобби'),
     'video': ('bg-4436f8', 'Видео'),
@@ -162,8 +161,8 @@ def create_topic(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.author = request.user
+            topic.avatar = request.user.avatar.url
             topic.save()
-
             tags_input = form.cleaned_data['tags']
             tag_names = [name.strip() for name in tags_input.split(',')]
 
@@ -193,6 +192,7 @@ def single_topic(request, id):
             comment = comment_form.save(commit=False)
             comment.topic = topic
             comment.author = request.user
+            comment.avatar = request.user.avatar.url
             comment.save()
             if topic.author != request.user:
                 Notification.objects.create(
