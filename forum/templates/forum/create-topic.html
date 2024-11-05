@@ -90,6 +90,14 @@
         .emoji-picker__category-label {
             display: none !important;
         }
+
+        .header__user-btn img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
     </style>
 
 </head>
@@ -120,10 +128,14 @@
                 <div class="header__user">
                     <div class="header__user-btn" data-dropdown-btn="user">
                         {% if request.user.is_authenticated %}
-                        <img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar">
+                        {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" alt="avatar">
+                        {% else %}
+                        <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
+                        {% endif %}
                         {{ request.user }}<i class="icon-Arrow_Below"></i>
                         {% else %}
-                        <img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar">
+                        <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
                         Анонимус<i class="icon-Arrow_Below"></i>
                         {% endif %}
                     </div>

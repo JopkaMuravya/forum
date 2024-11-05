@@ -1,27 +1,13 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, UserRegistrationForm, AcauntForm
+from .forms import LoginForm, UserRegistrationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .forms import TopicForm, CommentForm
-from .models import Topic, Tag, Comment
+from .forms import TopicForm, CommentForm, CustomUser_ChangeForm
+from .models import Topic, Tag, Comment, CustomUser
+from django.core.files.storage import FileSystemStorage
 
-
-
-
-def user_acaunt(request):
-    user = request.user  # Получаем текущего пользователя
-    if request.method == 'POST':  # Проверка, был ли отправлен POST-запрос
-        form = LoginForm(request.POST)  # Создание формы с данными пользователя
-        if form.is_valid():  # Проверка, валидна ли форма
-            form.save()  # Сохранение изменений в базе данных
-            messages.success(request, 'Ваши данные успешно обновлены.')  # Сообщение об успешном обновлении
-            return redirect('main_str')  # Перенаправление на главную страницу
-    else:
-        form = LoginForm()  # Если не POST-запрос, создаем форму с текущими данными пользователя
-
-    return render(request, 'forum/acaunt.html', {'form': form})  # Отображение страницы редактирования с формой
 
 def user_login(request):
     logout(request)
@@ -56,6 +42,23 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'forum/simple-signup.html', {'user_form': user_form})
+
+
+@login_required
+def user_account(request):
+    user = request.user  # Получаем текущего пользователя
+
+    if request.method == 'POST':
+        user_form = CustomUser_ChangeForm(request.POST, request.FILES, instance=user)
+        if user_form.is_valid():
+            user_form.save()  # Сохраняем изменения в модели
+            return redirect('main_str')  # Перенаправление на главную страницу
+    else:
+        user_form = CustomUser_ChangeForm(instance=user)
+
+    avatar_url = user.avatar.url if hasattr(user, 'avatar') and user.avatar else None
+
+    return render(request, 'forum/acaunt.html', {'user_form': user_form, 'avatar_url': avatar_url})
 
 
 
