@@ -1,12 +1,27 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, AcauntForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .forms import TopicForm, CommentForm
 from .models import Topic, Tag, Comment
 
+
+
+
+def user_acaunt(request):
+    user = request.user  # Получаем текущего пользователя
+    if request.method == 'POST':  # Проверка, был ли отправлен POST-запрос
+        form = LoginForm(request.POST)  # Создание формы с данными пользователя
+        if form.is_valid():  # Проверка, валидна ли форма
+            form.save()  # Сохранение изменений в базе данных
+            messages.success(request, 'Ваши данные успешно обновлены.')  # Сообщение об успешном обновлении
+            return redirect('main_str')  # Перенаправление на главную страницу
+    else:
+        form = LoginForm()  # Если не POST-запрос, создаем форму с текущими данными пользователя
+
+    return render(request, 'forum/acaunt.html', {'form': form})  # Отображение страницы редактирования с формой
 
 def user_login(request):
     logout(request)
@@ -26,6 +41,7 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'forum/signin.html', {'form': form})
+
 
 
 def register(request):

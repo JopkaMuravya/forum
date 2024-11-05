@@ -10,6 +10,7 @@ urlpatterns = [
     path('signup/', views.register, name='signup'),
     path('signin/', views.user_login, name='signin'),
     path('topic/<int:id>/', views.single_topic, name='single_topic'),
+    path('acaunt/', views.user_acaunt, name='acaunt'),
 ]
 
 if settings.DEBUG:

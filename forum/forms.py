@@ -7,6 +7,27 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
+class AcauntForm(forms.Form):
+    username = forms.CharField(label='Никнейм', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'image']
+        labels = {
+            'username': 'Никнейм',
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+            'email': 'Почта',
+            'image': 'Аватар',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите ваш комментарий здесь...'})
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите ваш комментарий здесь...'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите ваш комментарий здесь...'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Напишите ваш комментарий здесь...'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control'})
+
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
