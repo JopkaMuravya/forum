@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from mysite.config import PASSWORD
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -125,5 +125,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'frogibogidogi@gmail.com'
-EMAIL_HOST_PASSWORD = 'Gknijnikov1029384756SND[$]'
+EMAIL_HOST_PASSWORD = PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

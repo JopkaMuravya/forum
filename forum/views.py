@@ -5,7 +5,10 @@ from .forms import LoginForm, UserRegistrationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .forms import TopicForm, CommentForm
-from .models import Topic, Tag, Comment
+from .models import Topic, Tag, Comment, CustomUser
+from django.core.mail import send_mail
+import uuid
+
 
 
 def user_login(request):
@@ -34,13 +37,36 @@ def register(request):
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
+            new_user.verification_token = str(uuid.uuid4())
             new_user.save()
+            send_verification_email(new_user)
             login(request, new_user)
             return redirect('main_str')
     else:
         user_form = UserRegistrationForm()
     return render(request, 'forum/simple-signup.html', {'user_form': user_form})
 
+
+def send_verification_email(user):
+    verification_link = f"http://localhost:8000/verify_email/{user.verification_token}/"
+    send_mail(
+        'Подтверждение электронной почты',
+        f'Перейдите по ссылке для подтверждения: {verification_link}',
+        'from@example.com',
+        [user.email],
+        fail_silently=False,
+    )
+
+
+def verify_email(request, token):
+    try:
+        user = CustomUser.objects.get(verification_token=token)
+        user.email_verified = True
+        user.verification_token = ''
+        user.save()
+        return redirect('main_str')
+    except CustomUser.DoesNotExist:
+        return render(request, 'forum/invalid_token.html')
 
 
 CATEGORY_COLORS = {
