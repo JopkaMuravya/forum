@@ -161,7 +161,10 @@ def create_topic(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.author = request.user
-            topic.avatar = request.user.avatar.url
+            if hasattr(request.user, 'avatar') and request.user.avatar:
+                topic.avatar = request.user.avatar.url
+            else:
+                topic.avatar = '../static/images/skuf_9.jpg'
             topic.save()
             tags_input = form.cleaned_data['tags']
             tag_names = [name.strip() for name in tags_input.split(',')]
@@ -192,7 +195,10 @@ def single_topic(request, id):
             comment = comment_form.save(commit=False)
             comment.topic = topic
             comment.author = request.user
-            comment.avatar = request.user.avatar.url
+            if hasattr(request.user, 'avatar') and request.user.avatar:
+                comment.avatar = request.user.avatar.url
+            else:
+                comment.avatar = '../static/images/skuf_9.jpg'
             comment.save()
             if topic.author != request.user:
                 Notification.objects.create(
