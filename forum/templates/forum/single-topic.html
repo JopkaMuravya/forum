@@ -310,8 +310,10 @@
 
                             <!-- Кнопка для отправки комментария -->
                             <div class="create__footer">
-                                {% if request.user.is_authenticated %}
+                                {% if request.user.is_authenticated and user.email_verified %}
                                 <button type="submit" class="create__btn-create btn btn--type-02">Отправить</button>
+                                {% elif request.user.is_authenticated %}
+                                <button type="button" class="create__btn-create btn btn--type-02">Отправить</button>
                                 {% else %}
                                 <a href="{% url 'signup' %}" class="create__btn-create btn btn--type-02">Отправить</a>
                                 {% endif %}

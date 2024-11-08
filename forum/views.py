@@ -222,27 +222,28 @@ def single_topic(request, id):
 
 @login_required
 def toggle_like(request, topic_id):
-    topic = get_object_or_404(Topic, id=topic_id)
-    like, created = Like.objects.get_or_create(user=request.user, topic=topic)
+    if request.user.email_verified:
+        topic = get_object_or_404(Topic, id=topic_id)
+        like, created = Like.objects.get_or_create(user=request.user, topic=topic)
 
-    if not created:
-        like.delete()
-        liked = False
-    else:
-        liked = True
-        if topic.author != request.user:
-            Notification.objects.create(
-                user=topic.author,
-                topic=topic,
-                notification_type='like',
-                created_at=timezone.now(),
-                is_read=False
-            )
+        if not created:
+            like.delete()
+            liked = False
+        else:
+            liked = True
+            if topic.author != request.user:
+                Notification.objects.create(
+                    user=topic.author,
+                    topic=topic,
+                    notification_type='like',
+                    created_at=timezone.now(),
+                    is_read=False
+                )
 
-    return JsonResponse({
-        'liked': liked,
-        'total_likes': topic.likes.count(),
-    })
+        return JsonResponse({
+            'liked': liked,
+            'total_likes': topic.likes.count(),
+        })
 
 
 @login_required
