@@ -32,17 +32,21 @@
 
     <style>
         .main__bg {
-            position: fixed; 
+            position: fixed;
             top: 0;
             left: 0;
+            height: 100vh;
             width: 100%;
-            height: 100vh; 
-            background-image: url('{% static "images/87.jpg" %}'); 
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed; 
-            z-index: -1; 
+            padding-top: 100px;
+            padding-bottom: 100px;
+            background-image: url('{% static "images/alt3.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -1;
         }
+
+
         .posts__item {
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 20px;
@@ -196,6 +200,7 @@
 
     <!-- MAIN -->
     <main>
+        
         <div class="main__bg"></div>
 
         <div class="container">
@@ -271,7 +276,11 @@
                             </div>
                             <div class="posts__users">
                                 <div>
-                                    <img src="{{ topic.avatar }}" alt="avatar"></a>
+                                    {% if topic.author.avatar %}
+                                    <img src="{{ topic.author.avatar.url }}" alt="avatar">
+                                    {% else %}
+                                    <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="posts__replies">{{ topic.comment_count }}</div>

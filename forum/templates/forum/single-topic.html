@@ -37,7 +37,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background-image: url('{% static "images/87.jpg" %}');
+            background-image: url('{% static "images/alt3.jpg" %}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -244,7 +244,11 @@
                         <div class="topic">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-                                    <img src="{{ topic.avatar }}" alt="avatar">
+                                    {% if topic.author.avatar %}
+                                    <img src="{{ topic.author.avatar.url }}" alt="avatar">
+                                    {% else %}
+                                    <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
+                                    {% endif %}
                                     <!--<a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>-->
                                 </div>
                                 <div class="topic__caption">
@@ -277,7 +281,11 @@
                         <div class="topic topic--comment">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-                                    <img src="{{ comment.avatar }}" alt="avatar">
+                                    {% if comment.author.avatar %}
+                                    <img src="{{ comment.author.avatar.url }}" alt="avatar">
+                                    {% else %}
+                                    <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
+                                    {% endif %}
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">

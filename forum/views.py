@@ -11,8 +11,6 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 
-
-
 def user_login(request):
     logout(request)
     if request.method == 'POST':
@@ -136,6 +134,11 @@ def main_str(request, category=None):
         topic.category_color = color
         topic.category_name = name
         topic.comment_count = topic.comments.count()
+    unread_notifications_count = 0
+    notifications = []
+    if request.user.is_authenticated:
+        unread_notifications_count = request.user.notification_set.filter(is_read=False).count()
+        notifications = request.user.notification_set.order_by('-created_at')
 
     unread_notifications_count = 0
     notifications = []

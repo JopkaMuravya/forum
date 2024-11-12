@@ -37,7 +37,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background-image: url('{% static "images/87.jpg" %}');
+            background-image: url('{% static "images/alt3.jpg" %}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -97,8 +97,9 @@
             border: 1px solid #ccc;
         }
 
-        .create__form .create__section {
-            justify-content: flex-start;
+        .create__textarea-head {
+            border: solid 1px #e9ecee;
+            background-color: white;
         }
     </style>
 
@@ -162,7 +163,9 @@
                     </div>
                     <div class="create__section">
                         <label class="create__label">Выберите категорию</label>
-                        {{ form.category }}
+                        <label class="custom-select">
+                            {{ form.category }}
+                        </label>
                     </div>
                     <div class="create__section create__textarea">
                         <label class="create__label">Описание</label>
