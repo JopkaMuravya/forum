@@ -182,11 +182,7 @@
                     <h1>
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
-<<<<<<< HEAD
                     <div class="header__title"><a href="{% url 'main_str' %}">Skuforum</a></div>
-=======
-                    <div class="header__title">Skuforum</div>
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
                 </div>
                 <div class="header__user">
                     <div class="header__user-btn" data-dropdown-btn="user">
@@ -205,12 +201,6 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
-<<<<<<< HEAD
-=======
-                                <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
-                                <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
-                                <a href="{% url 'acaunt' %}"><i class="icon-Preferences"></i></a>
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
                                 {% if request.user.is_authenticated %}
                                 <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
                                 <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
@@ -254,15 +244,11 @@
                         <div class="topic">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-<<<<<<< HEAD
                                     {% if topic.author.avatar %}
                                     <img src="{{ topic.author.avatar.url }}" alt="avatar">
                                     {% else %}
                                     <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
                                     {% endif %}
-=======
-                                    <img src="{{ topic.avatar }}" alt="avatar">
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
                                     <!--<a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>-->
                                 </div>
                                 <div class="topic__caption">
@@ -295,15 +281,11 @@
                         <div class="topic topic--comment">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-<<<<<<< HEAD
                                     {% if comment.author.avatar %}
                                     <img src="{{ comment.author.avatar.url }}" alt="avatar">
                                     {% else %}
                                     <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
                                     {% endif %}
-=======
-                                    <img src="{{ comment.avatar }}" alt="avatar">
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">
