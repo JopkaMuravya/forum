@@ -5,9 +5,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.mail import send_mail
 import uuid
-from .models import Topic, Tag, Comment, Like, CustomUser
+from .models import Topic, Tag, Comment, Like, Notification, CustomUser
+from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -78,6 +80,7 @@ def user_account(request):
         user_form = CustomUser_ChangeForm(request.POST, request.FILES, instance=user)
         if user_form.is_valid():
             user_form.save()
+           
             return redirect('main_str')
     else:
         user_form = CustomUser_ChangeForm(instance=user)
@@ -85,8 +88,6 @@ def user_account(request):
     avatar_url = user.avatar.url if hasattr(user, 'avatar') and user.avatar else None
 
     return render(request, 'forum/acaunt.html', {'user_form': user_form, 'avatar_url': avatar_url})
-
-
 
 
 CATEGORY_COLORS = {
@@ -113,6 +114,9 @@ def main_str(request, category=None):
     tags = Tag.objects.all()
     topics = Topic.objects.all()
 
+    if request.GET.get('my_topics') == 'true' and request.user.is_authenticated:
+        topics = topics.filter(author=request.user)
+
     if request.GET.get('liked_topics') == 'true' and request.user.is_authenticated:
         topics = topics.filter(likes__user=request.user)
 
@@ -134,6 +138,12 @@ def main_str(request, category=None):
         topic.category_name = name
         topic.comment_count = topic.comments.count()
 
+    unread_notifications_count = 0
+    notifications = []
+    if request.user.is_authenticated:
+        unread_notifications_count = request.user.notification_set.filter(is_read=False).count()
+        notifications = request.user.notification_set.order_by('-created_at')
+
     categories = CATEGORY_COLORS
     return render(request, 'forum/index.html', {
         'topics': topics,
@@ -141,6 +151,8 @@ def main_str(request, category=None):
         'tags': tags,
         'selected_tags': list(map(int, selected_tags)),
         'search_query': search_query,
+        'unread_notifications_count': unread_notifications_count,
+        'notifications': notifications,
     })
 
 
@@ -150,9 +162,11 @@ def create_topic(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.author = request.user
-            topic.avatar = request.user.avatar.url
+            if hasattr(request.user, 'avatar') and request.user.avatar:
+                topic.avatar = request.user.avatar.url
+            else:
+                topic.avatar = '../static/images/skuf_9.jpg'
             topic.save()
-
             tags_input = form.cleaned_data['tags']
             tag_names = [name.strip() for name in tags_input.split(',')]
 
@@ -182,8 +196,19 @@ def single_topic(request, id):
             comment = comment_form.save(commit=False)
             comment.topic = topic
             comment.author = request.user
-            comment.avatar = request.user.avatar.url
+            if hasattr(request.user, 'avatar') and request.user.avatar:
+                comment.avatar = request.user.avatar.url
+            else:
+                comment.avatar = '../static/images/skuf_9.jpg'
             comment.save()
+            if topic.author != request.user:
+                Notification.objects.create(
+                    user=topic.author,
+                    topic=topic,
+                    notification_type='reply',
+                    created_at=timezone.now(),
+                    is_read=False
+                )
             return redirect('single_topic', id=topic.id)
     else:
         comment_form = CommentForm()
@@ -206,8 +231,24 @@ def toggle_like(request, topic_id):
         liked = False
     else:
         liked = True
+        if topic.author != request.user:
+            Notification.objects.create(
+                user=topic.author,
+                topic=topic,
+                notification_type='like',
+                created_at=timezone.now(),
+                is_read=False
+            )
 
     return JsonResponse({
         'liked': liked,
         'total_likes': topic.likes.count(),
     })
+
+
+@login_required
+def mark_notifications_read(request):
+    if request.method == 'POST':
+        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'}, status=400)

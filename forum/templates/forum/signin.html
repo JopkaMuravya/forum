@@ -8,7 +8,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Responsive HTML5 Template">
     <meta name="author" content="author.com">
-    <title>Responsive HTML5 Template</title>
+    <title>Авторизация</title>
 
     <!-- STYLESHEET -->
     <!-- fonts -->
@@ -44,6 +44,12 @@
             z-index: -1;
         }
 
+        .nik_text {
+            color: #ffff;
+            padding-right: 10px;
+            padding-top: 8px;
+        }
+
     </style>
 </head>
 <body>
@@ -53,7 +59,7 @@
     <header class="signup__header">
         <div class="container">
             <div class="signup__header-content">
-                <p><a href="#">Нет учётной записи?</a></p>
+                <p class="nik_text">Нет учётной записи?</p>
                 <a href="{% url 'signup' %}" class="btn">Зарегистрироваться</a>
             </div>
         </div>
@@ -67,7 +73,7 @@
         <div class="container">
             <div class="signup__container">
                 <div class="signup__logo">
-                    <a href="#"><img src="{% static 'images/logo_forum.png' %}" alt="logo">Skuforum</a>
+                    <a href="{% url 'main_str' %}"><img src="{% static 'images/logo_forum.png' %}" alt="logo">Skuforum</a>
                 </div>
                 <div class="signup__head">
                     <h3>Войдите в учётную запись</h3>

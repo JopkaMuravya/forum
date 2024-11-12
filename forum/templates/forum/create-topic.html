@@ -37,7 +37,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background-image: url('{% static "images/87.jpg" %}');
+            background-image: url('{% static "images/alt3.jpg" %}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -97,9 +97,13 @@
             border: 1px solid #ccc;
         }
 
-        .create__form .create__section {
-            justify-content: flex-start;
+        .create__textarea-head {
+            border: solid 1px #e9ecee;
+            background-color: white;
         }
+            /*        .create__form .create__section {
+            justify-content: flex-start;
+        }*/
     </style>
 
 </head>
@@ -111,7 +115,7 @@
                     <h1>
                         <img src="{% static 'images/logo_forum.png' %}" alt="logo">
                     </h1>
-                    <div class="header__title">Skuforum</div>
+                    <div class="header__title"><a href="{% url 'main_str' %}">Skuforum</a></div>
                 </div>
                 <div class="header__user">
                     <div class="header__user-btn" data-dropdown-btn="user">
@@ -162,11 +166,15 @@
                     </div>
                     <div class="create__section">
                         <label class="create__label">Выберите категорию</label>
-                        {{ form.category }}
+                        <label class="custom-select">
+                            {{ form.category }}
+                        </label>
                     </div>
                     <div class="create__section create__textarea">
                         <label class="create__label">Описание</label>
                         <div class="create__textarea-head">
+                            <span><i class="icon-Bold"></i></span>
+                            <span><i class="icon-Italic"></i></span>
                             <span><i class="icon-Emoticon" id="emoji-trigger"></i></span>
                         </div>
                         {{ form.description }}
