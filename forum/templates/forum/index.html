@@ -87,6 +87,13 @@
             border: 1px solid #ccc;
         }
 
+        .posts__item p i {
+            font-style: italic;
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            vertical-align: baseline;
+        }
 
     </style>
 
@@ -244,7 +251,7 @@
                                     <a href="{% url 'single_topic' topic.id %}">
                                         <h3>{{ topic.title }}</h3>
                                     </a>
-                                    <p>{{ topic.description|truncatewords:20 }}</p>
+                                    <p>{{ topic.description|safe|truncatewords:20 }}</p>
                                     <div class="posts__tags tags">
                                         {% for tag in topic.tags.all %}
                                         <a href="#" style="background-color: {{ tag.color }};">{{ tag.name }}</a>
