@@ -5,19 +5,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.mail import send_mail
 import uuid
-<<<<<<< HEAD
 from .models import Topic, Tag, Comment, Like, Notification, CustomUser
 from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-
-
-=======
-from .models import Topic, Tag, Comment, Like, CustomUser
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
 
 
 def user_login(request):
@@ -87,10 +78,6 @@ def user_account(request):
         user_form = CustomUser_ChangeForm(request.POST, request.FILES, instance=user)
         if user_form.is_valid():
             user_form.save()
-<<<<<<< HEAD
-           
-=======
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
             return redirect('main_str')
     else:
         user_form = CustomUser_ChangeForm(instance=user)
@@ -99,12 +86,6 @@ def user_account(request):
 
     return render(request, 'forum/acaunt.html', {'user_form': user_form, 'avatar_url': avatar_url})
 
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
 CATEGORY_COLORS = {
     'hobby': ('bg-f9bc64', 'Хобби'),
     'video': ('bg-4436f8', 'Видео'),
@@ -129,12 +110,9 @@ def main_str(request, category=None):
     tags = Tag.objects.all()
     topics = Topic.objects.all()
 
-<<<<<<< HEAD
     if request.GET.get('my_topics') == 'true' and request.user.is_authenticated:
         topics = topics.filter(author=request.user)
 
-=======
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
     if request.GET.get('liked_topics') == 'true' and request.user.is_authenticated:
         topics = topics.filter(likes__user=request.user)
 
@@ -155,15 +133,11 @@ def main_str(request, category=None):
         topic.category_color = color
         topic.category_name = name
         topic.comment_count = topic.comments.count()
-<<<<<<< HEAD
-
     unread_notifications_count = 0
     notifications = []
     if request.user.is_authenticated:
         unread_notifications_count = request.user.notification_set.filter(is_read=False).count()
         notifications = request.user.notification_set.order_by('-created_at')
-=======
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
 
     categories = CATEGORY_COLORS
     return render(request, 'forum/index.html', {
@@ -183,14 +157,10 @@ def create_topic(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.author = request.user
-<<<<<<< HEAD
             if hasattr(request.user, 'avatar') and request.user.avatar:
                 topic.avatar = request.user.avatar.url
             else:
                 topic.avatar = '../static/images/skuf_9.jpg'
-=======
-            topic.avatar = request.user.avatar.url
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
             topic.save()
             tags_input = form.cleaned_data['tags']
             tag_names = [name.strip() for name in tags_input.split(',')]
@@ -221,14 +191,10 @@ def single_topic(request, id):
             comment = comment_form.save(commit=False)
             comment.topic = topic
             comment.author = request.user
-<<<<<<< HEAD
             if hasattr(request.user, 'avatar') and request.user.avatar:
                 comment.avatar = request.user.avatar.url
             else:
                 comment.avatar = '../static/images/skuf_9.jpg'
-=======
-            comment.avatar = request.user.avatar.url
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
             comment.save()
             if topic.author != request.user:
                 Notification.objects.create(
@@ -247,26 +213,6 @@ def single_topic(request, id):
         'comments': comments,
         'comment_form': comment_form,
         'user_liked': user_liked,
-<<<<<<< HEAD
-=======
-    })
-
-
-@login_required
-def toggle_like(request, topic_id):
-    topic = get_object_or_404(Topic, id=topic_id)
-    like, created = Like.objects.get_or_create(user=request.user, topic=topic)
-
-    if not created:
-        like.delete()
-        liked = False
-    else:
-        liked = True
-
-    return JsonResponse({
-        'liked': liked,
-        'total_likes': topic.likes.count(),
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
     })
 
 
