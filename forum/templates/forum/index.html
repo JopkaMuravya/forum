@@ -72,6 +72,7 @@
             border: 1px solid #ccc;
         }
 
+<<<<<<< HEAD
         .notification-list {
             padding: 10px;
         }
@@ -88,6 +89,8 @@
             color: #555;
         }
 
+=======
+>>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
         .posts__body > p {
             color: azure;
             font-size: 24px;
@@ -102,6 +105,10 @@
             object-fit: cover;
             border: 1px solid #ccc;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
     </style>
 
 </head>
@@ -173,6 +180,12 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
                         <div>
                             <div class="dropdown__icons">
+<<<<<<< HEAD
+=======
+                                <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
+                                <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
+                                <a href="{% url 'acaunt' %}"><i class="icon-Preferences"></i></a>
+>>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
                                 {% if request.user.is_authenticated %}
                                 <a href="{% url 'main_str' %}?liked_topics=true"><i class="icon-Favorite_Topic"></i></a>
                                 <a href="{% url 'main_str' %}?my_topics=true"><i class="icon-Message"></i></a>
@@ -277,11 +290,15 @@
                             </div>
                             <div class="posts__users">
                                 <div>
+<<<<<<< HEAD
                                     {% if topic.author.avatar %}
                                     <img src="{{ topic.author.avatar.url }}" alt="avatar">
                                     {% else %}
                                     <img src="{% static 'images/skuf_9.jpg' %}" alt="avatar">
                                     {% endif %}
+=======
+                                    <img src="{{ topic.avatar }}" alt="avatar"></a>
+>>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
                                 </div>
                             </div>
                             <div class="posts__replies">{{ topic.comment_count }}</div>

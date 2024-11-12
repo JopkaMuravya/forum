@@ -48,8 +48,11 @@ class CustomUser(AbstractUser):
     email_verified = models.BooleanField(default=False)
     verification_token = models.CharField(max_length=255, blank=True, null=True)
 
+<<<<<<< HEAD
     
 
+=======
+>>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
 
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -60,6 +63,7 @@ class Like(models.Model):
         unique_together = ('user', 'topic')
 
 
+<<<<<<< HEAD
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
@@ -69,3 +73,8 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.notification_type} on {self.topic.title}"
+=======
+class CustomUser(AbstractUser):
+    avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True)
+    verification_token = models.CharField(max_length=255, blank=True, null=True)
+>>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
