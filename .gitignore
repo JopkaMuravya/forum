@@ -2,8 +2,4 @@ db.sqlite3
 venv
 .idea
 *.pyc
-<<<<<<< HEAD
 config.py
-=======
-config.py
->>>>>>> dd961532875eb9393702bcc7c0752245bc29ca52
