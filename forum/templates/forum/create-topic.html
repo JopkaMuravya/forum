@@ -167,6 +167,8 @@
                     <div class="create__section create__textarea">
                         <label class="create__label">Описание</label>
                         <div class="create__textarea-head">
+                            <span><i class="icon-Bold"></i></span>
+                            <span><i class="icon-Italic"></i></span>
                             <span><i class="icon-Emoticon" id="emoji-trigger"></i></span>
                         </div>
                         {{ form.description }}
@@ -223,6 +225,32 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const boldButton = document.querySelector('.icon-Bold');
+            const italicButton = document.querySelector('.icon-Italic');
+            const textarea = document.querySelector('textarea[name="description"]');
+
+            function wrapSelectedText(openTag, closeTag) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const selectedText = textarea.value.substring(start, end);
+                const newText = openTag + selectedText + closeTag;
+                textarea.setRangeText(newText, start, end, 'end');
+                textarea.focus();
+            }
+
+            boldButton.addEventListener('click', function () {
+                wrapSelectedText('<b>', '</b>');
+            });
+
+            italicButton.addEventListener('click', function () {
+                wrapSelectedText('<i>', '</i>');
+            });
+        });
+    </script>
+
 
 </body>
 </html>

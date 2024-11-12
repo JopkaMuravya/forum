@@ -256,7 +256,7 @@
                             </div>
                             <div class="topic__content">
                                 <div class="topic__text">
-                                    <p>{{ topic.description }}</p>
+                                    <p>{{ topic.description|safe }}</p>
                                 </div>
 
                                 {% if topic.image %}
@@ -287,7 +287,7 @@
                             </div>
                             <div class="topic__content">
                                 <div class="topic__text">
-                                    <p>{{ comment.text }}</p>
+                                    <p>{{ comment.text|safe }}</p>
                                     {% if comment.image %}
                                     <img src="{{ comment.image.url }}" alt="Comment Image" class="comment-image" onclick="openModal(this.src)">
                                     {% endif %}
@@ -302,6 +302,8 @@
                             <div class="create__section create__textarea">
                                 <label class="create__label">Ваш комментарий</label>
                                 <div class="create__textarea-head">
+                                    <span><i class="icon-Bold"></i></span>
+                                    <span><i class="icon-Italic"></i></span>
                                     <span><i class="icon-Emoticon" id="emoji-trigger"></i></span>
                                     <input type="file" name="image" accept="image/*">
                                 </div>
@@ -409,6 +411,31 @@
                         likeCount.textContent = data.total_likes;
                     });
                 });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const boldButton = document.querySelector('.create__textarea-head .icon-Bold');
+            const italicButton = document.querySelector('.create__textarea-head .icon-Italic');
+            const textarea = document.querySelector('textarea[name="text"]');
+
+            function wrapSelectedText(openTag, closeTag) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const selectedText = textarea.value.substring(start, end);
+                const newText = openTag + selectedText + closeTag;
+                textarea.setRangeText(newText, start, end, 'end');
+                textarea.focus();
+            }
+
+            boldButton.addEventListener('click', function () {
+                wrapSelectedText('<b>', '</b>');
+            });
+
+            italicButton.addEventListener('click', function () {
+                wrapSelectedText('<i>', '</i>');
             });
         });
     </script>
