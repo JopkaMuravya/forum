@@ -99,6 +99,42 @@
             vertical-align: baseline;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
     </style>
 
 </head>
@@ -189,7 +225,7 @@
                     {% if request.user.is_authenticated and user.email_verified %}
                     <a href="{% url 'create-topic' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
                     {% elif request.user.is_authenticated %}
-                    <a><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+                    <a id="modBtn"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
                     {% else %}
                     <a href="{% url 'signup' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
                     {% endif %}
@@ -295,6 +331,14 @@
         </div>
     </main>
 
+    <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Внимание!</h2>
+        <p>Вам необходимо подтвердить почту!</p>
+    </div>
+    </div>
+
     <!-- JAVA SCRIPT -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
@@ -324,6 +368,23 @@
                 .catch(error => console.error('Ошибка:', error));
             });
         });
+    </script>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("modBtn");
+        var span = document.getElementsByClassName("close")[0];
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 
 
