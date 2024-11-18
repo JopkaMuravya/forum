@@ -294,7 +294,7 @@
                                     <a href="{% url 'single_topic' topic.id %}">
                                         <h3>{{ topic.title }}</h3>
                                     </a>
-                                    <p>{{ topic.description|safe|truncatewords:20 }}</p>
+                                    <div>{{ topic.get_markdown|safe|truncatewords:20 }}</div>
                                     <div class="posts__tags tags">
                                         {% for tag in topic.tags.all %}
                                         <a href="#" style="background-color: {{ tag.color }};">{{ tag.name }}</a>

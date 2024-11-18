@@ -296,7 +296,7 @@
                             </div>
                             <div class="topic__content">
                                 <div class="topic__text">
-                                    <p>{{ topic.description|safe }}</p>
+                                    <div>{{ topic.get_markdown|safe }}</div>
                                 </div>
 
                                 {% if topic.image %}
@@ -331,7 +331,7 @@
                             </div>
                             <div class="topic__content">
                                 <div class="topic__text">
-                                    <p>{{ comment.text|safe }}</p>
+                                    <div>{{ comment.get_markdown|safe }}</div>
                                     {% if comment.image %}
                                     <img src="{{ comment.image.url }}" alt="Comment Image" class="comment-image" onclick="openModal(this.src)">
                                     {% endif %}
@@ -483,11 +483,11 @@
             }
 
             boldButton.addEventListener('click', function () {
-                wrapSelectedText('<b>', '</b>');
+                wrapSelectedText('**', '**');
             });
 
             italicButton.addEventListener('click', function () {
-                wrapSelectedText('<i>', '</i>');
+                wrapSelectedText('*', '*');
             });
         });
     </script>

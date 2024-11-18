@@ -2,7 +2,8 @@ from django.db import models
 import random
 from django.contrib.auth.models import User, AbstractUser
 from mysite import settings
-
+import markdown
+import bleach
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name="Тег")
@@ -27,6 +28,13 @@ class Topic(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Автор темы")
     avatar = models.ImageField(upload_to='avatar_images/', blank=True, null=True, verbose_name="Аватар темы")
 
+    def get_markdown(self):
+        html = markdown.markdown(self.description, extensions=['fenced_code'])
+        allowed_tags = list(bleach.sanitizer.ALLOWED_TAGS) + ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre']
+        print(allowed_tags)
+        return bleach.clean(html, tags=allowed_tags)
+
+
     def __str__(self):
         return self.title
 
@@ -38,6 +46,13 @@ class Comment(models.Model):
     text = models.TextField(verbose_name="Текст комментария")
     image = models.ImageField(upload_to='comment_images/', blank=True, null=True, verbose_name="Изображение")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    def get_markdown(self):
+        html = markdown.markdown(self.text, extensions=['fenced_code'])
+        allowed_tags = list(bleach.sanitizer.ALLOWED_TAGS) + ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre']
+        print(allowed_tags)
+        return bleach.clean(html, tags=allowed_tags)
+
 
     def __str__(self):
         return f"Комментарий от {self.author.username} к теме {self.topic}"
